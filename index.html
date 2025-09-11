@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Криптографические алгоритмы</title>
+    
+    <!-- Reveal.js CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/white.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <!-- Титульный слайд -->
+            <section data-markdown>
+                <textarea data-template>
+                    # Криптографические алгоритмы
+                    ## Презентация по криптографии
+                    
+                    Выполнил: Студент
+                </textarea>
+            </section>
+
+            <!-- Содержание -->
+            <section>
+                <h2>Содержание</h2>
+                <ul class="menu">
+                    <li><a href="#/cryptography-definition">Определение криптографии</a></li>
+                    <li><a href="#/caesar-cipher">Шифр Цезаря</a></li>
+                    <li><a href="#/knapsack">Задача о рюкзаке</a></li>
+                    <li><a href="#/merkle-hellman">Криптосистема Меркла-Хеллмана</a></li>
+                    <li><a href="#/morse-code">Азбука Морзе</a></li>
+                </ul>
+            </section>
+
+            <!-- Раздел: Криптография -->
+            <section>
+                <h2>Криптография</h2>
+                <p>Основные понятия и методы</p>
+            </section>
+
+            <!-- Определение криптографии -->
+            <section data-markdown>
+                <textarea data-template>
+                    ## Определение криптографии
+                    
+                    Криптография — это наука о методах обеспечения конфиденциальности, целостности данных, аутентификации и невозможности отказа от авторства.
+                    
+                    Основные цели:
+                    - **Конфиденциальность** — обеспечение секретности информации
+                    - **Целостность** — обеспечение неизменности информации
+                    - **Аутентификация** — подтверждение подлинности
+                    - **Неотрекаемость** — невозможность отказа от авторства
+                </textarea>
+            </section>
+
+            <!-- Раздел: Шифр Цезаря -->
+            <section>
+                <h2>Шифр Цезаря</h2>
+                <p>Один из древнейших шифров</p>
+            </section>
+
+            <!-- Описание шифра Цезаря -->
+            <section data-markdown>
+                <textarea data-template>
+                    ## Описание шифра Цезаря
+                    
+                    Шифр Цезаря — это вид шифра подстановки, в котором каждый символ в открытом тексте заменяется символом, находящимся на некотором постоянном числе позиций левее или правее него в алфавите.
+                    
+                    Особенности:
+                    - Простая реализация
+                    - Легкость взлома
+                    - Историческая значимость
+                    
+                    Математически шифр можно описать формулами:
+                    - Шифрование: `E(x) = (x + k) mod n`
+                    - Дешифрование: `D(x) = (x - k) mod n`
+                </textarea>
+            </section>
+
+            <!-- Пример шифра Цезаря -->
+            <section data-markdown>
+                <textarea data-template>
+                    ## Пример шифра Цезаря
+                    
+                    Используем алфавит: АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ
+                    и сдвиг k = 3
+                    
+                    Пример:
+                    - Исходный текст: "ПРИВЕТ МИР"
+                    - Зашифрованный: "ТУЛЕЙХ ПЛУ"
+                    
+                    Пояснение:
+                    - П → Т (15 + 3 = 18)
+                    - Р → У (16 + 3 = 19)
+                    - И → Л (9 + 3 = 12)
+                    - и т.д.
+                </textarea>
+            </section>
+
+            <!-- Программа шифра Цезаря -->
+            <section>
+                <h2>Реализация шифра Цезаря</h2>
+                <div class="code-demo">
+                    <div class="input-group">
+                        <label for="caesar-input">Текст:</label>
+                        <input type="text" id="caesar-input" value="ПРИВЕТ МИР">
+                    </div>
+                    <div class="input-group">
+                        <label for="caesar-shift">Сдвиг:</label>
+                        <input type="number" id="caesar-shift" value="3" min="1" max="46">
+                    </div>
+                    <button onclick="encryptCaesar()">Зашифровать</button>
+                    <button onclick="decryptCaesar()">Расшифровать</button>
+                    <div class="result">
+                        <label for="caesar-output">Результат:</label>
+                        <input type="text" id="caesar-output" readonly>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Раздел: Задача о рюкзаке -->
+            <section>
+                <h2>Задача о рюкзаке</h2>
+                <p>NP-полная задача</p>
+            </section>
+
+            <!-- Описание задачи о рюкзаке -->
+            <section data-markdown>
+                <textarea data-template>
+                    ## Задача о рюкзаке
+                    
+                    Задача о рюкзаке — это NP-полная задача комбинаторной оптимизации.
+                    
+                    Формулировка:
+                    - Дан набор предметов с весом и стоимостью
+                    - Необходимо выбрать подмножество предметов
+                    - Суммарный вес не превышает заданной величины
+                    - Суммарная стоимость максимальна
+                    
+                    В криптографии используется "легкая" версия задачи:
+                    - Супервозрастающая последовательность
+                    - Быстрое решение для специального случая
+                </textarea>
+            </section>
+
+            <!-- Раздел: Меркл-Хеллман -->
+            <section>
+                <h2>Криптосистема Меркла-Хеллмана</h2>
+                <p>Криптосистема на основе задачи о рюкзаке</p>
+            </section>
+
+            <!-- Описание Меркл-Хеллман -->
+            <section data-markdown>
+                <textarea data-template>
+                    ## Криптосистема Меркла-Хеллмана
+                    
+                    Криптосистема с открытым ключом, основанная на задаче о рюкзаке.
+                    
+                    Алгоритм:
+                    1. Генерация супервозрастающей последовательности
+                    2. Выбор модуля и множителя
+                    3. Создание открытого ключа
+                    4. Шифрование битовых последовательностей
+                    
+                    Особенности:
+                    - Первая криптосистема с открытым ключом
+                    - Взломан в 1982 году Шамиром
+                </textarea>
+            </section>
+
+            <!-- Пример Меркл-Хеллман -->
+            <section data-markdown>
+                <textarea data-template>
+                    ## Пример Меркла-Хеллмана
+                    
+                    Пусть:
+                    - Супервозрастающая последовательность: [2, 3, 6, 13, 27]
+                    - Модуль: 53 > суммы всех элементов (51)
+                    - Множитель: 10 (взаимно простой с 53)
+                    
+                    Открытый ключ:
+                    - [2*10 mod 53, 3*10 mod 53, ...] = [20, 30, 7, 24, 5]
+                    
+                    Шифрование сообщения "10101":
+                    - 1*20 + 0*30 + 1*7 + 0*24 + 1*5 = 20 + 7 + 5 = 32
+                    
+                    Дешифрование:
+                    - 32 * inv(10, 53) = 32 * 16 = 512 mod 53 = 32*16 mod 53 = 512 mod 53 = 32
+                    - Решаем задачу для супервозрастающей последовательности
+                </textarea>
+            </section>
+
+            <!-- Программа Меркл-Хеллман -->
+            <section>
+                <h2>Реализация Меркла-Хеллмана</h2>
+                <div class="code-demo">
+                    <div class="input-group">
+                        <label for="mh-input">Битовое сообщение:</label>
+                        <input type="text" id="mh-input" value="10101">
+                    </div>
+                    <button onclick="encryptMH()">Зашифровать</button>
+                    <button onclick="decryptMH()">Расшифровать</button>
+                    <div class="result">
+                        <label for="mh-output">Результат:</label>
+                        <input type="text" id="mh-output" readonly>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Раздел: Азбука Морзе -->
+            <section>
+                <h2>Азбука Морзе</h2>
+                <p>Средство передачи сообщений</p>
+            </section>
+
+            <!-- Описание азбуки Морзе -->
+            <section data-markdown>
+                <textarea data-template>
+                    ## Азбука Морзе
+                    
+                    Азбука Морзе — способ кодирования букв алфавита, цифр, знаков препинания и других символов последовательностью сигналов: длинных («тире») и коротких («точек»).
+                    
+                    История:
+                    - Разработана в 1838 году Сэмюэлем Морзе
+                    - Широко использовалась в телеграфии
+                    - До сих пор применяется в радиосвязи
+                    
+                    Особенности:
+                    - Передача с помощью звука, света или радиосигналов
+                    - Международный стандарт для передачи букв и цифр
+                </textarea>
+            </section>
+
+            <!-- Алфавит Морзе -->
+            <section data-markdown>
+                <textarea data-template>
+                    ## Алфавит Морзе
+                    
+                    Русский алфавит:
+                    - А: ·−     - Б: −···   - В: ·−−    - Г: −−·
+                    - Д: −··    - Е: ·      - Ё: ·      - Ж: ····
+                    - З: −−··   - И: ··     - Й: ·−−−   - К: −·−
+                    - Л: ·−··   - М: −−     - Н: −·     - О: −−−
+                    - П: ·−−·   - Р: ·−·    - С: ···    - Т: −
+                    - У: ··−    - Ф: ··−·   - Х: ····   - Ц: −·−·
+                    - Ч: −−−·   - Ш: −−−−   - Щ: −−·−   - Ъ: −−·−−
+                    - Ы: −·−−   - Ь: −··−   - Э: ··−··  - Ю: ··−−
+                    - Я: ·−·−
+                    
+                    Цифры:
+                    - 1: ·−−−−  - 2: ··−−−  - 3: ···−−  - 4: ····−
+                    - 5: ·····  - 6: −····  - 7: −−···  - 8: −−−··
+                    - 9: −−−−·  - 0: −−−−−
+                </textarea>
+            </section>
+
+            <!-- Программа Морзе -->
+            <section>
+                <h2>Конвертер азбуки Морзе</h2>
+                <div class="code-demo">
+                    <div class="input-group">
+                        <label for="morse-input">Текст:</label>
+                        <input type="text" id="morse-input" value="ПРИВЕТ">
+                    </div>
+                    <button onclick="textToMorse()">В азбуку Морзе</button>
+                    <button onclick="morseToText()">Из азбуки Морзе</button>
+                    <div class="result">
+                        <label for="morse-output">Результат:</label>
+                        <input type="text" id="morse-output" readonly>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Исходный код -->
+            <section>
+                <h2>Исходный код программ</h2>
+                <p>Реализация на JavaScript</p>
+                <pre><code class="javascript" data-trim>
+// Пример кода шифра Цезаря
+function caesarCipher(text, shift, encrypt = true) {
+  const alphabet = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ .,?";
+  let result = "";
+  
+  for (let char of text.toUpperCase()) {
+    const index = alphabet.indexOf(char);
+    if (index === -1) {
+      result += char;
+      continue;
+    }
+    
+    let newIndex;
+    if (encrypt) {
+      newIndex = (index + shift) % alphabet.length;
+    } else {
+      newIndex = (index - shift + alphabet.length) % alphabet.length;
+    }
+    
+    result += alphabet[newIndex];
+  }
+  
+  return result;
+}
+                </code></pre>
+            </section>
+
+            <!-- Заключительный слайд -->
+            <section data-markdown>
+                <textarea data-template>
+                    # Спасибо за внимание!
+                    
+                    Вопросы?
+                </textarea>
+            </section>
+        </div>
+    </div>
+
+    <!-- Reveal.js Script -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/plugin/markdown/markdown.js"></script>
+    
+    <!-- Custom Script -->
+    <script src="script.js"></script>
+    
+    <script>
+        // Инициализация Reveal.js
+        Reveal.initialize({
+            hash: true,
+            plugins: [ RevealMarkdown ],
+            controls: true,
+            progress: true,
+            center: true,
+            transition: 'slide'
+        });
+    </script>
+</body>
+</html>
