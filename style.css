@@ -647,3 +647,46 @@ button:hover {
     border-radius: 8px;
     margin-top: 1em;
 }
+
+/* КРИТИЧЕСКИ ВАЖНО: Разблокировка интерактивных элементов */
+.reveal .slides section {
+    pointer-events: none !important;
+}
+
+.reveal .slides section.present {
+    pointer-events: auto !important;
+}
+
+.reveal .slides section .demo-container,
+.reveal .slides section input,
+.reveal .slides section textarea,
+.reveal .slides section button,
+.reveal .slides section select {
+    pointer-events: auto !important;
+    z-index: 10000 !important;
+    position: relative !important;
+}
+
+/* Гарантируем кликабельность */
+.reveal .slides section.present * {
+    pointer-events: auto !important;
+}
+
+/* Специально для demo-контейнеров */
+.demo-container {
+    pointer-events: auto !important;
+    z-index: 100000 !important;
+}
+
+.demo-container * {
+    pointer-events: auto !important;
+    z-index: 100001 !important;
+}
+
+/* Инпут-элементы */
+input, textarea, button {
+    pointer-events: auto !important;
+    touch-action: manipulation !important;
+    -webkit-user-select: auto !important;
+    user-select: auto !important;
+}
