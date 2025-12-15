@@ -1,4 +1,69 @@
 // ============================================
+// ИНИЦИАЛИЗАЦИЯ ИНТЕРАКТИВНЫХ ЭЛЕМЕНТОВ
+// ============================================
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Ждем полной загрузки Reveal.js
+    setTimeout(function() {
+        initInteractiveElements();
+    }, 1000);
+    
+    // Также инициализируем при смене слайда
+    Reveal.addEventListener('slidechanged', function(event) {
+        setTimeout(initInteractiveElements, 100);
+    });
+});
+
+function initInteractiveElements() {
+    console.log('Инициализация интерактивных элементов...');
+    
+    // Шифр Цезаря
+    const caesarText = document.getElementById('caesar-text');
+    const caesarShift = document.getElementById('caesar-shift');
+    const shiftValue = document.getElementById('shift-value');
+    const encryptBtn = document.getElementById('encrypt-btn');
+    const decryptBtn = document.getElementById('decrypt-btn');
+    
+    if (caesarShift && shiftValue) {
+        // Обновление значения сдвига
+        caesarShift.addEventListener('input', function(e) {
+            e.stopPropagation();
+            shiftValue.textContent = this.value;
+        });
+        
+        // Обработка кликов с остановкой распространения
+        if (encryptBtn) {
+            encryptBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                e.preventDefault();
+                encryptCaesar();
+            });
+        }
+        
+        if (decryptBtn) {
+            decryptBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                e.preventDefault();
+                decryptCaesar();
+            });
+        }
+        
+        // Разрешаем ввод в текстовых полях
+        if (caesarText) {
+            caesarText.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+            
+            caesarText.addEventListener('keydown', function(e) {
+                e.stopPropagation();
+            });
+            
+            caesarText.addEventListener('touchstart', function(e) {
+                e.stopPropagation();
+            });
+        }
+    }
+// ============================================
 // ШИФР ЦЕЗАРЯ
 // ============================================
 
