@@ -425,14 +425,31 @@ code {
     font-family: 'Courier New', monospace;
 }
 
+
+/* Убираем тени и наложения */
+.reveal .slides section.past,
+.reveal .slides section.future {
+    opacity: 0 !important;
+    visibility: hidden !important;
+}
+
+/* Фоны слайдов */
+.reveal .slide-background {
+    opacity: 0 !important;
+    transition: opacity 0.5s ease !important;
+}
+
+.reveal .slide-background.present {
+    opacity: 1 !important;
+}
+
 /* Навигация Reveal.js */
 .reveal .controls {
-    color: var(--primary-color);
+    z-index: 100 !important;
 }
 
 .reveal .progress {
-    background: rgba(0, 0, 0, 0.2);
-    color: var(--primary-color);
+    z-index: 100 !important;
 }
 
 /* Адаптивность */
@@ -474,10 +491,27 @@ code {
     }
 }
 
-.reveal .slides section {
-    animation: fadeIn 0.5s ease-out;
+.reveal .slides {
+    overflow: hidden !important;
 }
 
+.reveal .slides section {
+    position: absolute !important;
+    width: 100% !important;
+    height: 100% !important;
+    top: 0 !important;
+    left: 0 !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    transition: opacity 0.5s ease, visibility 0.5s ease !important;
+    z-index: 1 !important;
+}
+
+.reveal .slides section.present {
+    opacity: 1 !important;
+    visibility: visible !important;
+    z-index: 2 !important;
+}
 /* Специальные классы для примеров */
 .original-text {
     color: var(--primary-color);
