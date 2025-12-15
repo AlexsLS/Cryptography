@@ -656,34 +656,67 @@ function morseToText(morse) {
     <script src="scripts.js"></script>
     
     <script>
-    Reveal.initialize({
-        // Основные настройки
+     Reveal.initialize({
         hash: true,
-        slideNumber: 'c/t',
-        controls: true,
-        progress: true,
-        center: true,
-        transition: 'slide', // или 'fade' для более плавного перехода
+        slideNumber: true,
+        transition: 'slide',
+        backgroundTransition: 'fade',
         
-        // Критические настройки для решения проблемы
-        backgroundTransition: 'none',
-        display: 'block',
-        viewDistance: 1, // Только 1 слайд в каждую сторону
-        preloadIframes: null,
-        
-        // Оптимизация производительности
-        mobileView: 'CASCADE',
+        // Критические настройки для интерактивных элементов
         touch: true,
-        hideInactiveCursor: true,
-        hideCursorTime: 2000,
+        keyboard: {
+            13: 'next', // Enter
+            27: function() {}, // ESC
+            32: function() {}, // Space
+            37: 'prev',
+            38: 'prev',
+            39: 'next',
+            40: 'next'
+        },
         
-        // Параметры перехода
-        transitionSpeed: 'default', // 'fast', 'slow', 'default'
-        parallaxBackgroundImage: '',
-        parallaxBackgroundSize: '',
+        // Разрешаем фокус на элементах
+        focusBodyOnPageVisibilityChange: true,
         
-        // Плагины
+        // Оптимизация для интерактивных элементов
+        disableLayout: false,
+        
         plugins: [RevealHighlight]
+    });
+     // Дополнительный JavaScript для работы интерактивных элементов
+    document.addEventListener('DOMContentLoaded', function() {
+        // Разрешаем клики по интерактивным элементам
+        document.querySelectorAll('input, textarea, button, select').forEach(function(el) {
+            el.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+            
+            el.addEventListener('touchstart', function(e) {
+                e.stopPropagation();
+            });
+            
+            el.addEventListener('keydown', function(e) {
+                e.stopPropagation();
+            });
+        });
+        
+        // Предотвращаем навигацию Reveal.js при фокусе на input
+        document.addEventListener('keydown', function(e) {
+            const active = document.activeElement;
+            const isInput = active && (
+                active.tagName === 'INPUT' || 
+                active.tagName === 'TEXTAREA' || 
+                active.tagName === 'SELECT' ||
+                active.tagName === 'BUTTON'
+            );
+            
+            if (isInput) {
+                // Позволяем использовать стрелки в текстовых полях
+                if (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA') {
+                    return true;
+                }
+                e.stopPropagation();
+            }
+        }, true);
     });
     
     // Дополнительный JavaScript для чистых переходов
