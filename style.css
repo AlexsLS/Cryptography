@@ -425,6 +425,73 @@ code {
     font-family: 'Courier New', monospace;
 }
 
+/* Разрешаем взаимодействие с интерактивными элементами */
+.reveal .slides section .demo-container * {
+    pointer-events: auto !important;
+}
+
+/* Специальные стили для интерактивных слайдов */
+.interactive-slide {
+    pointer-events: auto !important;
+}
+
+.interactive-slide * {
+    pointer-events: auto !important;
+}
+
+/* Обеспечиваем видимость интерактивных элементов */
+.reveal .slides section.present .input-group input,
+.reveal .slides section.present .input-group textarea,
+.reveal .slides section.present .input-group select,
+.reveal .slides section.present button {
+    opacity: 1 !important;
+    visibility: visible !important;
+    z-index: 1000 !important;
+    position: relative !important;
+}
+
+/* Фикс для textarea и input */
+textarea, input[type="text"], input[type="range"] {
+    background: white !important;
+    color: #333 !important;
+    font-size: 0.7em !important;
+    padding: 10px !important;
+    border: 2px solid #3498db !important;
+    border-radius: 5px !important;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1) !important;
+}
+
+textarea:focus, input[type="text"]:focus {
+    outline: none !important;
+    border-color: #2ecc71 !important;
+    box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.3) !important;
+}
+
+/* Кнопки */
+button {
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+}
+
+button:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2) !important;
+}
+
+/* Гарантируем, что интерактивные элементы поверх всего */
+.reveal .slides section {
+    z-index: 1;
+}
+
+.reveal .slides section.present {
+    z-index: 2;
+}
+
+.demo-container {
+    z-index: 100 !important;
+    position: relative !important;
+}
+
 
 /* Убираем тени и наложения */
 .reveal .slides section.past,
