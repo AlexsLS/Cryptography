@@ -6,336 +6,668 @@
     <title>Криптографические алгоритмы</title>
     
     <!-- Reveal.js CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/white.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/theme/black.min.css">
     
     <!-- Custom CSS -->
     <link rel="stylesheet" href="style.css">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <div class="reveal">
         <div class="slides">
-            <!-- Титульный слайд -->
-            <section data-markdown>
-                <textarea data-template>
-                    # Криптографические алгоритмы
-                    ## Презентация по криптографии
-                    
-                    Выполнил: Студент
-                </textarea>
+            
+            <!-- Слайд 1: Титульный -->
+            <section>
+                <h1>Криптографические алгоритмы</h1>
+                <h3>Исследование и реализация</h3>
+                <div class="author-info">
+                    <p>Студент: [Ваше Имя]</p>
+                    <p>Группа: [Ваша Группа]</p>
+                    <p>Дата: <span id="current-date"></span></p>
+                </div>
+                <div class="footer-note">
+                    <p>Презентация создана с использованием Reveal.js</p>
+                </div>
             </section>
 
-            <!-- Содержание -->
+            <!-- Слайд 2: Меню/Оглавление -->
             <section>
                 <h2>Содержание</h2>
-                <ul class="menu">
-                    <li><a href="#/cryptography-definition">Определение криптографии</a></li>
-                    <li><a href="#/caesar-cipher">Шифр Цезаря</a></li>
-                    <li><a href="#/knapsack">Задача о рюкзаке</a></li>
-                    <li><a href="#/merkle-hellman">Криптосистема Меркла-Хеллмана</a></li>
-                    <li><a href="#/morse-code">Азбука Морзе</a></li>
-                </ul>
+                <div class="menu-container">
+                    <ol class="menu-list">
+                        <li><a href="#/3" class="menu-link">Введение в криптографию</a></li>
+                        <li><a href="#/7" class="menu-link">Шифр Цезаря</a></li>
+                        <li><a href="#/13" class="menu-link">Задача о рюкзаке</a></li>
+                        <li><a href="#/17" class="menu-link">Азбука Морзе</a></li>
+                        <li><a href="#/23" class="menu-link">Заключение</a></li>
+                    </ol>
+                </div>
+                <div class="menu-note">
+                    <p>Используйте стрелки для навигации или выберите раздел выше</p>
+                </div>
             </section>
 
-            <!-- Раздел: Криптография -->
+            <!-- Раздел 1: Введение в криптографию -->
+            <section class="section-divider">
+                <h1><i class="fas fa-lock"></i> Часть 1</h1>
+                <h2>Введение в криптографию</h2>
+            </section>
+
+            <!-- Слайд 3: Определение криптографии -->
             <section>
-                <h2>Криптография</h2>
-                <p>Основные понятия и методы</p>
+                <h2>Что такое криптография?</h2>
+                <div class="definition">
+                    <p><strong>Криптография</strong> (от греч. κρυπτός — скрытый и γράφω — пишу) — наука о методах обеспечения конфиденциальности, целостности данных, аутентификации и шифрования.</p>
+                </div>
+                <div class="content-block">
+                    <h3>Основные цели:</h3>
+                    <ul>
+                        <li><strong>Конфиденциальность</strong> - защита от несанкционированного доступа</li>
+                        <li><strong>Целостность</strong> - обеспечение неизменности информации</li>
+                        <li><strong>Аутентификация</strong> - подтверждение подлинности</li>
+                        <li><strong>Неотрекаемость</strong> - невозможность отказа от авторства</li>
+                    </ul>
+                </div>
             </section>
 
-            <!-- Определение криптографии -->
-            <section data-markdown>
-                <textarea data-template>
-                    ## Определение криптографии
-                    
-                    Криптография — это наука о методах обеспечения конфиденциальности, целостности данных, аутентификации и невозможности отказа от авторства.
-                    
-                    Основные цели:
-                    - **Конфиденциальность** — обеспечение секретности информации
-                    - **Целостность** — обеспечение неизменности информации
-                    - **Аутентификация** — подтверждение подлинности
-                    - **Неотрекаемость** — невозможность отказа от авторства
-                </textarea>
-            </section>
-
-            <!-- Раздел: Шифр Цезаря -->
+            <!-- Слайд 4: История криптографии -->
             <section>
+                <h2>Историческая справка</h2>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <h4>Древний мир</h4>
+                        <p>Шифр Цезаря (100-44 до н.э.)</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4>Средневековье</h4>
+                        <p>Моноалфавитные шифры</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4>XX век</h4>
+                        <p>Энигма, DES, RSA</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4>Современность</h4>
+                        <p>AES, квантовая криптография</p>
+                    </div>
+                </div>
+                <div class="content-block">
+                    <h3>Ключевые моменты:</h3>
+                    <ul>
+                        <li>Эволюция от простых подстановок до сложных математических алгоритмов</li>
+                        <li>Появление асимметричной криптографии в 1970-х</li>
+                        <li>Современные стандарты: AES (2001), RSA (1977)</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Раздел 2: Шифр Цезаря -->
+            <section class="section-divider">
+                <h1><i class="fas fa-exchange-alt"></i> Часть 2</h1>
                 <h2>Шифр Цезаря</h2>
-                <p>Один из древнейших шифров</p>
             </section>
 
-            <!-- Описание шифра Цезаря -->
-            <section data-markdown>
-                <textarea data-template>
-                    ## Описание шифра Цезаря
-                    
-                    Шифр Цезаря — это вид шифра подстановки, в котором каждый символ в открытом тексте заменяется символом, находящимся на некотором постоянном числе позиций левее или правее него в алфавите.
-                    
-                    Особенности:
-                    - Простая реализация
-                    - Легкость взлома
-                    - Историческая значимость
-                    
-                    Математически шифр можно описать формулами:
-                    - Шифрование: `E(x) = (x + k) mod n`
-                    - Дешифрование: `D(x) = (x - k) mod n`
-                </textarea>
-            </section>
-
-            <!-- Пример шифра Цезаря -->
-            <section data-markdown>
-                <textarea data-template>
-                    ## Пример шифра Цезаря
-                    
-                    Используем алфавит: АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ
-                    и сдвиг k = 3
-                    
-                    Пример:
-                    - Исходный текст: "ПРИВЕТ МИР"
-                    - Зашифрованный: "ТУЛЕЙХ ПЛУ"
-                    
-                    Пояснение:
-                    - П → Т (15 + 3 = 18)
-                    - Р → У (16 + 3 = 19)
-                    - И → Л (9 + 3 = 12)
-                    - и т.д.
-                </textarea>
-            </section>
-
-            <!-- Программа шифра Цезаря -->
+            <!-- Слайд 5: Описание шифра Цезаря -->
             <section>
-                <h2>Реализация шифра Цезаря</h2>
-                <div class="code-demo">
-                    <div class="input-group">
-                        <label for="caesar-input">Текст:</label>
-                        <input type="text" id="caesar-input" value="ПРИВЕТ МИР">
+                <h2>Шифр Цезаря: Описание</h2>
+                <div class="algorithm-description">
+                    <p><strong>Шифр Цезаря</strong> — один из древнейших шифров, названный в честь римского императора Гая Юлия Цезаря.</p>
+                </div>
+                <div class="content-block">
+                    <h3>Принцип работы:</h3>
+                    <ul>
+                        <li>Алгоритм подстановки, где каждая буква сдвигается на фиксированное число позиций в алфавите</li>
+                        <li>Простой пример: сдвиг на 3 позиции: A → D, B → E, C → F, ...</li>
+                        <li>Математическая формула: <code>E(x) = (x + k) mod n</code></li>
+                        <li>Дешифровка: <code>D(x) = (x - k) mod n</code></li>
+                    </ul>
+                </div>
+                <div class="note">
+                    <p><strong>Примечание:</strong> В нашей реализации используется алфавит из 47 символов</p>
+                </div>
+            </section>
+
+            <!-- Слайд 6: Пример шифра Цезаря -->
+            <section>
+                <h2>Шифр Цезаря: Пример</h2>
+                <div class="example-container">
+                    <div class="example">
+                        <h4>Исходный текст:</h4>
+                        <p class="original-text">ПРИВЕТ, МИР!</p>
                     </div>
-                    <div class="input-group">
-                        <label for="caesar-shift">Сдвиг:</label>
-                        <input type="number" id="caesar-shift" value="3" min="1" max="46">
+                    <div class="example">
+                        <h4>Сдвиг на 3 позиции:</h4>
+                        <p class="encrypted-text">ТУЛЗИХ, ПЛУ!</p>
                     </div>
-                    <button onclick="encryptCaesar()">Зашифровать</button>
-                    <button onclick="decryptCaesar()">Расшифровать</button>
-                    <div class="result">
-                        <label for="caesar-output">Результат:</label>
-                        <input type="text" id="caesar-output" readonly>
+                </div>
+                <div class="visualization">
+                    <h4>Визуализация сдвига:</h4>
+                    <div class="alphabet-row">
+                        <span>П → Т</span>
+                        <span>Р → У</span>
+                        <span>И → Л</span>
+                        <span>В → З</span>
+                        <span>Е → И</span>
+                        <span>Т → Х</span>
+                    </div>
+                </div>
+                <div class="note">
+                    <p><strong>Алфавит:</strong> 33 русские буквы + 10 цифр + пробел, запятая, точка, знак вопроса = 47 символов</p>
+                </div>
+            </section>
+
+            <!-- Слайд 7: Демонстрация шифра Цезаря -->
+            <section>
+                <h2>Демонстрация: Шифр Цезаря</h2>
+                <div class="demo-container">
+                    <div class="input-group">
+                        <label for="caesar-text">Текст для шифрования:</label>
+                        <textarea id="caesar-text" rows="3" placeholder="Введите текст...">Привет, мир! 2024</textarea>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="caesar-shift">Сдвиг (ключ):</label>
+                        <input type="range" id="caesar-shift" min="1" max="46" value="3">
+                        <span id="shift-value">3</span>
+                    </div>
+                    
+                    <div class="button-group">
+                        <button onclick="encryptCaesar()" class="btn btn-encrypt">
+                            <i class="fas fa-lock"></i> Зашифровать
+                        </button>
+                        <button onclick="decryptCaesar()" class="btn btn-decrypt">
+                            <i class="fas fa-unlock"></i> Расшифровать
+                        </button>
+                    </div>
+                    
+                    <div class="result-group">
+                        <label>Результат:</label>
+                        <div id="caesar-result" class="result-box"></div>
                     </div>
                 </div>
             </section>
 
-            <!-- Раздел: Задача о рюкзаке -->
+            <!-- Раздел 3: Задача о рюкзаке -->
+            <section class="section-divider">
+                <h1><i class="fas fa-briefcase"></i> Часть 3</h1>
+                <h2>Задача о рюкзаке и Меркл-Хеллман</h2>
+            </section>
+
+            <!-- Слайд 8: Задача о рюкзаке - описание -->
             <section>
                 <h2>Задача о рюкзаке</h2>
-                <p>NP-полная задача</p>
+                <div class="algorithm-description">
+                    <p><strong>Задача о рюкзаке</strong> — комбинаторная задача: имеется рюкзак определённой грузоподъёмности и набор предметов с определёнными весами и ценностями. Требуется определить, какие предметы взять, чтобы максимизировать общую ценность, не превышая грузоподъёмность.</p>
+                </div>
+                <div class="content-block">
+                    <h3>В криптографии:</h3>
+                    <ul>
+                        <li>Используется для создания односторонних функций</li>
+                        <li>Основа для криптосистемы Меркла-Хеллмана</li>
+                        <li>Простая в одну сторону, сложная в обратную (NP-полная задача)</li>
+                    </ul>
+                </div>
+                <div class="example">
+                    <h4>Пример:</h4>
+                    <p>Рюкзак вмещает 15 кг. Предметы: (5кг, $10), (7кг, $13), (6кг, $8), (3кг, $6)</p>
+                </div>
             </section>
 
-            <!-- Описание задачи о рюкзаке -->
-            <section data-markdown>
-                <textarea data-template>
-                    ## Задача о рюкзаке
-                    
-                    Задача о рюкзаке — это NP-полная задача комбинаторной оптимизации.
-                    
-                    Формулировка:
-                    - Дан набор предметов с весом и стоимостью
-                    - Необходимо выбрать подмножество предметов
-                    - Суммарный вес не превышает заданной величины
-                    - Суммарная стоимость максимальна
-                    
-                    В криптографии используется "легкая" версия задачи:
-                    - Супервозрастающая последовательность
-                    - Быстрое решение для специального случая
-                </textarea>
-            </section>
-
-            <!-- Раздел: Меркл-Хеллман -->
+            <!-- Слайд 9: Криптосистема Меркла-Хеллмана -->
             <section>
                 <h2>Криптосистема Меркла-Хеллмана</h2>
-                <p>Криптосистема на основе задачи о рюкзаке</p>
+                <div class="algorithm-description">
+                    <p><strong>Криптосистема Меркла-Хеллмана</strong> — одна из первых асимметричных криптосистем, основанная на задаче о рюкзаке (1978).</p>
+                </div>
+                <div class="content-block">
+                    <h3>Принцип работы:</h3>
+                    <ol>
+                        <li>Выбор сверхрастущей последовательности</li>
+                        <li>Выбор множителя и модуля для преобразования</li>
+                        <li>Публичный ключ: преобразованная последовательность</li>
+                        <li>Приватный ключ: исходная последовательность, множитель и модуль</li>
+                    </ol>
+                </div>
+                <div class="note">
+                    <p><strong>Важно:</strong> Система была взломана в 1984 году, но представляет исторический интерес</p>
+                </div>
             </section>
 
-            <!-- Описание Меркл-Хеллман -->
-            <section data-markdown>
-                <textarea data-template>
-                    ## Криптосистема Меркла-Хеллмана
-                    
-                    Криптосистема с открытым ключом, основанная на задаче о рюкзаке.
-                    
-                    Алгоритм:
-                    1. Генерация супервозрастающей последовательности
-                    2. Выбор модуля и множителя
-                    3. Создание открытого ключа
-                    4. Шифрование битовых последовательностей
-                    
-                    Особенности:
-                    - Первая криптосистема с открытым ключом
-                    - Взломан в 1982 году Шамиром
-                </textarea>
-            </section>
-
-            <!-- Пример Меркл-Хеллман -->
-            <section data-markdown>
-                <textarea data-template>
-                    ## Пример Меркла-Хеллмана
-                    
-                    Пусть:
-                    - Супервозрастающая последовательность: [2, 3, 6, 13, 27]
-                    - Модуль: 53 > суммы всех элементов (51)
-                    - Множитель: 10 (взаимно простой с 53)
-                    
-                    Открытый ключ:
-                    - [2*10 mod 53, 3*10 mod 53, ...] = [20, 30, 7, 24, 5]
-                    
-                    Шифрование сообщения "10101":
-                    - 1*20 + 0*30 + 1*7 + 0*24 + 1*5 = 20 + 7 + 5 = 32
-                    
-                    Дешифрование:
-                    - 32 * inv(10, 53) = 32 * 16 = 512 mod 53 = 32*16 mod 53 = 512 mod 53 = 32
-                    - Решаем задачу для супервозрастающей последовательности
-                </textarea>
-            </section>
-
-            <!-- Программа Меркл-Хеллман -->
+            <!-- Слайд 10: Пример Меркла-Хеллмана -->
             <section>
-                <h2>Реализация Меркла-Хеллмана</h2>
-                <div class="code-demo">
-                    <div class="input-group">
-                        <label for="mh-input">Битовое сообщение:</label>
-                        <input type="text" id="mh-input" value="10101">
+                <h2>Пример: Меркл-Хеллман</h2>
+                <div class="example-container">
+                    <div class="step">
+                        <h4>Шаг 1: Сверхрастущая последовательность</h4>
+                        <p><code>[2, 5, 11, 23, 47, 95, 203]</code></p>
                     </div>
-                    <button onclick="encryptMH()">Зашифровать</button>
-                    <button onclick="decryptMH()">Расшифровать</button>
-                    <div class="result">
-                        <label for="mh-output">Результат:</label>
-                        <input type="text" id="mh-output" readonly>
+                    <div class="step">
+                        <h4>Шаг 2: Выбираем множитель и модуль</h4>
+                        <p>Множитель: <code>m = 41</code>, Модуль: <code>n = 491</code></p>
+                    </div>
+                    <div class="step">
+                        <h4>Шаг 3: Вычисляем публичный ключ</h4>
+                        <p><code>[82, 205, 451, 443, 418, 359, 372]</code></p>
+                    </div>
+                    <div class="step">
+                        <h4>Шаг 4: Шифрование сообщения</h4>
+                        <p>Сообщение "1010110" → Сумма: 82 + 451 + 418 + 359 = 1310</p>
                     </div>
                 </div>
             </section>
 
-            <!-- Раздел: Азбука Морзе -->
+            <!-- Слайд 11: Демонстрация Меркла-Хеллмана -->
             <section>
+                <h2>Демонстрация: Меркл-Хеллман</h2>
+                <div class="demo-container">
+                    <div class="input-group">
+                        <label for="mh-message">Сообщение (бинарная строка):</label>
+                        <input type="text" id="mh-message" value="1101001" placeholder="Введите бинарную строку">
+                    </div>
+                    
+                    <div class="button-group">
+                        <button onclick="generateMHKeys()" class="btn btn-generate">
+                            <i class="fas fa-key"></i> Сгенерировать ключи
+                        </button>
+                        <button onclick="encryptMH()" class="btn btn-encrypt">
+                            <i class="fas fa-lock"></i> Зашифровать
+                        </button>
+                        <button onclick="decryptMH()" class="btn btn-decrypt">
+                            <i class="fas fa-unlock"></i> Расшифровать
+                        </button>
+                    </div>
+                    
+                    <div class="result-group">
+                        <label>Приватный ключ:</label>
+                        <div id="mh-private-key" class="result-box small"></div>
+                        
+                        <label>Публичный ключ:</label>
+                        <div id="mh-public-key" class="result-box small"></div>
+                        
+                        <label>Результат шифрования:</label>
+                        <div id="mh-result" class="result-box"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Раздел 4: Азбука Морзе -->
+            <section class="section-divider">
+                <h1><i class="fas fa-signal"></i> Часть 4</h1>
                 <h2>Азбука Морзе</h2>
-                <p>Средство передачи сообщений</p>
             </section>
 
-            <!-- Описание азбуки Морзе -->
-            <section data-markdown>
-                <textarea data-template>
-                    ## Азбука Морзе
-                    
-                    Азбука Морзе — способ кодирования букв алфавита, цифр, знаков препинания и других символов последовательностью сигналов: длинных («тире») и коротких («точек»).
-                    
-                    История:
-                    - Разработана в 1838 году Сэмюэлем Морзе
-                    - Широко использовалась в телеграфии
-                    - До сих пор применяется в радиосвязи
-                    
-                    Особенности:
-                    - Передача с помощью звука, света или радиосигналов
-                    - Международный стандарт для передачи букв и цифр
-                </textarea>
-            </section>
-
-            <!-- Алфавит Морзе -->
-            <section data-markdown>
-                <textarea data-template>
-                    ## Алфавит Морзе
-                    
-                    Русский алфавит:
-                    - А: ·−     - Б: −···   - В: ·−−    - Г: −−·
-                    - Д: −··    - Е: ·      - Ё: ·      - Ж: ····
-                    - З: −−··   - И: ··     - Й: ·−−−   - К: −·−
-                    - Л: ·−··   - М: −−     - Н: −·     - О: −−−
-                    - П: ·−−·   - Р: ·−·    - С: ···    - Т: −
-                    - У: ··−    - Ф: ··−·   - Х: ····   - Ц: −·−·
-                    - Ч: −−−·   - Ш: −−−−   - Щ: −−·−   - Ъ: −−·−−
-                    - Ы: −·−−   - Ь: −··−   - Э: ··−··  - Ю: ··−−
-                    - Я: ·−·−
-                    
-                    Цифры:
-                    - 1: ·−−−−  - 2: ··−−−  - 3: ···−−  - 4: ····−
-                    - 5: ·····  - 6: −····  - 7: −−···  - 8: −−−··
-                    - 9: −−−−·  - 0: −−−−−
-                </textarea>
-            </section>
-
-            <!-- Программа Морзе -->
+            <!-- Слайд 12: Описание азбуки Морзе -->
             <section>
-                <h2>Конвертер азбуки Морзе</h2>
-                <div class="code-demo">
-                    <div class="input-group">
-                        <label for="morse-input">Текст:</label>
-                        <input type="text" id="morse-input" value="ПРИВЕТ">
+                <h2>Азбука Морзе: Описание</h2>
+                <div class="algorithm-description">
+                    <p><strong>Азбука Морзе</strong> — способ кодирования букв алфавита, цифр и знаков препинания с помощью коротких (точка) и длинных (тире) сигналов.</p>
+                </div>
+                <div class="content-block">
+                    <h3>Историческая справка:</h3>
+                    <ul>
+                        <li>Разработана Сэмюэлем Морзе в 1838 году</li>
+                        <li>Использовалась для телеграфной связи</li>
+                        <li>Актуальна в радиосвязи, авиации, на флоте</li>
+                        <li>Международный сигнал бедствия: SOS (··· --- ···)</li>
+                    </ul>
+                </div>
+                <div class="note">
+                    <p><strong>Интересный факт:</strong> Самая короткая буква в азбуке Морзе — "Е" (·)</p>
+                </div>
+            </section>
+
+            <!-- Слайд 13: Алфавит Морзе -->
+            <section>
+                <h2>Алфавит Морзе (русский)</h2>
+                <div class="morse-alphabet">
+                    <div class="morse-column">
+                        <h4>Буквы:</h4>
+                        <ul>
+                            <li>А · −</li>
+                            <li>Б − · · ·</li>
+                            <li>В · − −</li>
+                            <li>Г − − ·</li>
+                            <li>Д − · ·</li>
+                            <li>Е ·</li>
+                            <li>Ж · · · −</li>
+                            <li>З − − · ·</li>
+                            <li>И · ·</li>
+                            <li>Й · − − −</li>
+                        </ul>
                     </div>
-                    <button onclick="textToMorse()">В азбуку Морзе</button>
-                    <button onclick="morseToText()">Из азбуки Морзе</button>
-                    <div class="result">
-                        <label for="morse-output">Результат:</label>
-                        <input type="text" id="morse-output" readonly>
+                    <div class="morse-column">
+                        <h4>Буквы (продолжение):</h4>
+                        <ul>
+                            <li>К − · −</li>
+                            <li>Л · − · ·</li>
+                            <li>М − −</li>
+                            <li>Н − ·</li>
+                            <li>О − − −</li>
+                            <li>П · − − ·</li>
+                            <li>Р · − ·</li>
+                            <li>С · · ·</li>
+                            <li>Т −</li>
+                            <li>У · · −</li>
+                        </ul>
+                    </div>
+                    <div class="morse-column">
+                        <h4>Цифры:</h4>
+                        <ul>
+                            <li>1 · − − − −</li>
+                            <li>2 · · − − −</li>
+                            <li>3 · · · − −</li>
+                            <li>4 · · · · −</li>
+                            <li>5 · · · · ·</li>
+                            <li>6 − · · · ·</li>
+                            <li>7 − − · · ·</li>
+                            <li>8 − − − · ·</li>
+                            <li>9 − − − − ·</li>
+                            <li>0 − − − − −</li>
+                        </ul>
                     </div>
                 </div>
             </section>
 
-            <!-- Исходный код -->
+            <!-- Слайд 14: Демонстрация азбуки Морзе -->
             <section>
-                <h2>Исходный код программ</h2>
-                <p>Реализация на JavaScript</p>
-                <pre><code class="javascript" data-trim>
-// Пример кода шифра Цезаря
+                <h2>Демонстрация: Азбука Морзе</h2>
+                <div class="demo-container">
+                    <div class="input-group">
+                        <label for="morse-text">Текст для преобразования:</label>
+                        <textarea id="morse-text" rows="3" placeholder="Введите текст на русском...">Привет мир</textarea>
+                    </div>
+                    
+                    <div class="button-group">
+                        <button onclick="textToMorse()" class="btn btn-encrypt">
+                            <i class="fas fa-long-arrow-alt-right"></i> Текст → Морзе
+                        </button>
+                        <button onclick="morseToText()" class="btn btn-decrypt">
+                            <i class="fas fa-long-arrow-alt-left"></i> Морзе → Текст
+                        </button>
+                    </div>
+                    
+                    <div class="result-group">
+                        <label>Результат:</label>
+                        <div id="morse-result" class="result-box"></div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Пример кода Морзе:</label>
+                        <div class="morse-example">
+                            <p><strong>SOS</strong>: ··· --- ···</p>
+                            <p><strong>ПРИВЕТ</strong>: ·−−· ·−· ·· ·−− · ·−</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Раздел 5: Исходный код -->
+            <section class="section-divider">
+                <h1><i class="fas fa-code"></i> Часть 5</h1>
+                <h2>Исходный код</h2>
+            </section>
+
+            <!-- Слайд 15: Исходный код шифра Цезаря -->
+            <section>
+                <h2>Исходный код: Шифр Цезаря</h2>
+                <pre><code class="javascript" data-trim data-line-numbers>
+// Алфавит из 47 символов
+const CAESAR_ALPHABET = 'АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ 1234567890,?.';
+
 function caesarCipher(text, shift, encrypt = true) {
-  const alphabet = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ .,?";
-  let result = "";
-  
-  for (let char of text.toUpperCase()) {
-    const index = alphabet.indexOf(char);
-    if (index === -1) {
-      result += char;
-      continue;
+    let result = '';
+    const n = CAESAR_ALPHABET.length;
+    
+    for (let char of text.toUpperCase()) {
+        const index = CAESAR_ALPHABET.indexOf(char);
+        if (index === -1) {
+            result += char;
+            continue;
+        }
+        
+        let newIndex;
+        if (encrypt) {
+            newIndex = (index + shift) % n;
+        } else {
+            newIndex = (index - shift + n) % n;
+        }
+        
+        result += CAESAR_ALPHABET[newIndex];
     }
     
-    let newIndex;
-    if (encrypt) {
-      newIndex = (index + shift) % alphabet.length;
-    } else {
-      newIndex = (index - shift + alphabet.length) % alphabet.length;
+    return result;
+}
+
+// Пример использования
+const encrypted = caesarCipher('ПРИВЕТ', 3, true);
+const decrypted = caesarCipher(encrypted, 3, false);
+                </code></pre>
+            </section>
+
+            <!-- Слайд 16: Исходный код Меркла-Хеллмана -->
+            <section>
+                <h2>Исходный код: Меркл-Хеллман</h2>
+                <pre><code class="javascript" data-trim data-line-numbers>
+class MerkleHellman {
+    constructor() {
+        this.privateKey = this.generateSuperIncreasingSequence(8);
+        this.multiplier = this.generateCoprime(100);
+        this.modulus = this.generateModulus(this.privateKey, this.multiplier);
+        this.publicKey = this.generatePublicKey();
     }
     
-    result += alphabet[newIndex];
-  }
-  
-  return result;
+    generateSuperIncreasingSequence(n) {
+        const sequence = [1];
+        for (let i = 1; i < n; i++) {
+            sequence.push(sequence.reduce((a, b) => a + b, 0) + 1);
+        }
+        return sequence;
+    }
+    
+    generatePublicKey() {
+        return this.privateKey.map(num => 
+            (num * this.multiplier) % this.modulus
+        );
+    }
+    
+    encrypt(message, publicKey) {
+        let sum = 0;
+        for (let i = 0; i < message.length; i++) {
+            if (message[i] === '1') {
+                sum += publicKey[i];
+            }
+        }
+        return sum;
+    }
+    
+    decrypt(ciphertext) {
+        // Реализация дешифрования с использованием приватного ключа
+        // и расширенного алгоритма Евклида
+        return this.solveKnapsack(ciphertext, this.privateKey);
+    }
 }
                 </code></pre>
             </section>
 
-            <!-- Заключительный слайд -->
-            <section data-markdown>
-                <textarea data-template>
-                    # Спасибо за внимание!
-                    
-                    Вопросы?
-                </textarea>
+            <!-- Слайд 17: Исходный код азбуки Морзе -->
+            <section>
+                <h2>Исходный код: Азбука Морзе</h2>
+                <pre><code class="javascript" data-trim data-line-numbers>
+const MORSE_CODE = {
+    'А': '.-', 'Б': '-...', 'В': '.--', 'Г': '--.', 'Д': '-..',
+    'Е': '.', 'Ё': '.', 'Ж': '...-', 'З': '--..', 'И': '..',
+    'Й': '.---', 'К': '-.-', 'Л': '.-..', 'М': '--', 'Н': '-.',
+    'О': '---', 'П': '.--.', 'Р': '.-.', 'С': '...', 'Т': '-',
+    'У': '..-', 'Ф': '..-.', 'Х': '....', 'Ц': '-.-.', 'Ч': '---.',
+    'Ш': '----', 'Щ': '--.-', 'Ъ': '--.--', 'Ы': '-.--', 'Ь': '-..-',
+    'Э': '..-..', 'Ю': '..--', 'Я': '.-.-',
+    '1': '.----', '2': '..---', '3': '...--', '4': '....-',
+    '5': '.....', '6': '-....', '7': '--...', '8': '---..',
+    '9': '----.', '0': '-----',
+    ' ': '/', ',': '--..--', '.': '.-.-.-', '?': '..--..'
+};
+
+function textToMorse(text) {
+    return text.toUpperCase().split('').map(char => 
+        MORSE_CODE[char] || char
+    ).join(' ');
+}
+
+function morseToText(morse) {
+    const morseToChar = {};
+    for (const [char, code] of Object.entries(MORSE_CODE)) {
+        morseToChar[code] = char;
+    }
+    
+    return morse.split(' ').map(code => 
+        morseToChar[code] || code
+    ).join('');
+}
+                </code></pre>
             </section>
+
+            <!-- Раздел 6: Заключение -->
+            <section class="section-divider">
+                <h1><i class="fas fa-graduation-cap"></i> Часть 6</h1>
+                <h2>Заключение</h2>
+            </section>
+
+            <!-- Слайд 18: Сравнение алгоритмов -->
+            <section>
+                <h2>Сравнение алгоритмов</h2>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Алгоритм</th>
+                            <th>Тип</th>
+                            <th>Сложность</th>
+                            <th>Применение</th>
+                            <th>Безопасность</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Шифр Цезаря</td>
+                            <td>Симметричный</td>
+                            <td>O(n)</td>
+                            <td>Исторический, образовательный</td>
+                            <td>Низкая</td>
+                        </tr>
+                        <tr>
+                            <td>Меркл-Хеллман</td>
+                            <td>Асимметричный</td>
+                            <td>O(n²)</td>
+                            <td>Исторический, основа для современных алгоритмов</td>
+                            <td>Средняя (взломан)</td>
+                        </tr>
+                        <tr>
+                            <td>Азбука Морзе</td>
+                            <td>Кодирование</td>
+                            <td>O(n)</td>
+                            <td>Связь, радиотелеграфия</td>
+                            <td>Не является шифром</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="conclusion">
+                    <h3>Выводы:</h3>
+                    <ul>
+                        <li>Криптография прошла долгий путь развития</li>
+                        <li>Современные алгоритмы основаны на сложных математических задачах</li>
+                        <li>Понимание исторических алгоритмов помогает освоить современные</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Слайд 19: Практическое применение -->
+            <section>
+                <h2>Практическое применение</h2>
+                <div class="applications">
+                    <div class="application-card">
+                        <i class="fas fa-shield-alt"></i>
+                        <h4>Информационная безопасность</h4>
+                        <p>Защита данных в интернете, SSL/TLS, VPN</p>
+                    </div>
+                    <div class="application-card">
+                        <i class="fas fa-credit-card"></i>
+                        <h4>Финансовая сфера</h4>
+                        <p>Банковские транзакции, электронные платежи</p>
+                    </div>
+                    <div class="application-card">
+                        <i class="fas fa-mobile-alt"></i>
+                        <h4>Мобильная связь</h4>
+                        <p>Защита сообщений, аутентификация</p>
+                    </div>
+                    <div class="application-card">
+                        <i class="fas fa-user-secret"></i>
+                        <h4>Конфиденциальность</h4>
+                        <p>Шифрование переписки, защита персональных данных</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Слайд 20: Заключительный слайд -->
+            <section>
+                <h1>Спасибо за внимание!</h1>
+                <div class="final-slide">
+                    <div class="summary">
+                        <h3>Ключевые моменты презентации:</h3>
+                        <ol>
+                            <li>Изучили основы криптографии</li>
+                            <li>Реализовали исторические алгоритмы</li>
+                            <li>Проанализировали их сильные и слабые стороны</li>
+                            <li>Создали интерактивные демонстрации</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="qrcode">
+                        <div class="qr-placeholder">
+                            <i class="fas fa-qrcode"></i>
+                            <p>QR-код для ссылки на презентацию</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-info">
+                        <h4>Контакты:</h4>
+                        <p><i class="fas fa-user"></i> [Ваше Имя]</p>
+                        <p><i class="fas fa-envelope"></i> [your.email@example.com]</p>
+                        <p><i class="fas fa-github"></i> [github-username]</p>
+                    </div>
+                    
+                    <div class="final-note">
+                        <p><strong>Презентация создана с использованием:</strong> Reveal.js, HTML5, CSS3, JavaScript</p>
+                    </div>
+                </div>
+            </section>
+
         </div>
     </div>
 
     <!-- Reveal.js Script -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/plugin/markdown/markdown.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.js"></script>
     
-    <!-- Custom Script -->
-    <script src="script.js"></script>
+    <!-- Plugin for code highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/highlight/highlight.min.js"></script>
+    
+    <!-- Custom Scripts -->
+    <script src="scripts.js"></script>
     
     <script>
         // Инициализация Reveal.js
         Reveal.initialize({
             hash: true,
-            plugins: [ RevealMarkdown ],
-            controls: true,
-            progress: true,
-            center: true,
-            transition: 'slide'
+            slideNumber: true,
+            transition: 'slide',
+            backgroundTransition: 'fade',
+            plugins: [RevealHighlight]
         });
+        
+        // Установка текущей даты
+        document.getElementById('current-date').textContent = 
+            new Date().toLocaleDateString('ru-RU');
     </script>
 </body>
 </html>
