@@ -656,18 +656,61 @@ function morseToText(morse) {
     <script src="scripts.js"></script>
     
     <script>
-        // Инициализация Reveal.js
-        Reveal.initialize({
-            hash: true,
-            slideNumber: true,
-            transition: 'slide',
-            backgroundTransition: 'fade',
-            plugins: [RevealHighlight]
+    Reveal.initialize({
+        // Основные настройки
+        hash: true,
+        slideNumber: 'c/t',
+        controls: true,
+        progress: true,
+        center: true,
+        transition: 'slide', // или 'fade' для более плавного перехода
+        
+        // Критические настройки для решения проблемы
+        backgroundTransition: 'none',
+        display: 'block',
+        viewDistance: 1, // Только 1 слайд в каждую сторону
+        preloadIframes: null,
+        
+        // Оптимизация производительности
+        mobileView: 'CASCADE',
+        touch: true,
+        hideInactiveCursor: true,
+        hideCursorTime: 2000,
+        
+        // Параметры перехода
+        transitionSpeed: 'default', // 'fast', 'slow', 'default'
+        parallaxBackgroundImage: '',
+        parallaxBackgroundSize: '',
+        
+        // Плагины
+        plugins: [RevealHighlight]
+    });
+    
+    // Дополнительный JavaScript для чистых переходов
+    document.addEventListener('DOMContentLoaded', function() {
+        // Принудительное обновление отображения
+        Reveal.addEventListener('slidechanged', function(event) {
+            // Скрываем все неактивные слайды
+            document.querySelectorAll('.slides section:not(.present)').forEach(function(slide) {
+                slide.style.display = 'none';
+            });
+            // Показываем активный слайд
+            if (event.currentSlide) {
+                event.currentSlide.style.display = 'block';
+            }
         });
         
-        // Установка текущей даты
-        document.getElementById('current-date').textContent = 
-            new Date().toLocaleDateString('ru-RU');
-    </script>
+        // Инициализация при загрузке
+        Reveal.addEventListener('ready', function(event) {
+            document.querySelectorAll('.slides section:not(.present)').forEach(function(slide) {
+                slide.style.display = 'none';
+            });
+        });
+    });
+    
+    // Установка текущей даты
+    document.getElementById('current-date').textContent = 
+        new Date().toLocaleDateString('ru-RU');
+</script>
 </body>
 </html>
