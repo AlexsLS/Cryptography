@@ -61,8 +61,10 @@ function initInteractiveElements() {
             caesarText.addEventListener('touchstart', function(e) {
                 e.stopPropagation();
             });
-        }
-    }
+           }
+    
+    // Аналогично для других интерактивных элементов...
+}
 // ============================================
 // ШИФР ЦЕЗАРЯ
 // ============================================
