@@ -19,7 +19,7 @@ input, textarea, button, select, .demo-container,
 
 /* Гарантируем, что клики проходят */
 .reveal .slides section * {
-    pointer-events: auto;
+    pointer-events: auto !important;
 }
 
 /* Переопределяем стили Reveal.js */
@@ -509,9 +509,8 @@ button:hover {
 
 /* Гарантируем, что интерактивные элементы поверх всего */
 .reveal .slides section {
-    z-index: 1;
+    pointer-events: none !important;
 }
-
 .reveal .slides section.present {
     z-index: 2;
 }
@@ -539,8 +538,9 @@ button:hover {
     opacity: 1;
 }
 /* Навигация Reveal.js */
+.reveal .progress,
 .reveal .controls {
-    z-index: 100 !important;
+    pointer-events: auto !important;
 }
 
 .reveal .progress {
@@ -591,6 +591,7 @@ button:hover {
     width: 100%;
     height: 100%;
     overflow: hidden;
+    pointer-events: none !important;
 }
 
 .reveal .slides > section,
