@@ -1,11 +1,23 @@
-// Шифр Цезаря
-const alphabet = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ .,?";
+// ============================================
+// ШИФР ЦЕЗАРЯ
+// ============================================
 
+// Алфавит из 47 символов: 33 русские буквы + 10 цифр + 4 знака препинания
+const CAESAR_ALPHABET = 'АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ 1234567890,?.';
+
+/**
+ * Шифрование/дешифрование шифром Цезаря
+ * @param {string} text - Исходный текст
+ * @param {number} shift - Величина сдвига
+ * @param {boolean} encrypt - true для шифрования, false для дешифрования
+ * @returns {string} - Результат шифрования/дешифрования
+ */
 function caesarCipher(text, shift, encrypt = true) {
-    let result = "";
+    let result = '';
+    const n = CAESAR_ALPHABET.length;
     
     for (let char of text.toUpperCase()) {
-        const index = alphabet.indexOf(char);
+        const index = CAESAR_ALPHABET.indexOf(char);
         if (index === -1) {
             result += char;
             continue;
@@ -13,139 +25,351 @@ function caesarCipher(text, shift, encrypt = true) {
         
         let newIndex;
         if (encrypt) {
-            newIndex = (index + shift) % alphabet.length;
+            newIndex = (index + shift) % n;
         } else {
-            newIndex = (index - shift + alphabet.length) % alphabet.length;
+            newIndex = (index - shift + n) % n;
         }
         
-        result += alphabet[newIndex];
+        result += CAESAR_ALPHABET[newIndex];
     }
     
     return result;
 }
 
+/**
+ * Демонстрация шифрования Цезаря
+ */
 function encryptCaesar() {
-    const input = document.getElementById('caesar-input').value;
+    const text = document.getElementById('caesar-text').value;
     const shift = parseInt(document.getElementById('caesar-shift').value);
-    document.getElementById('caesar-output').value = caesarCipher(input, shift, true);
+    
+    if (!text.trim()) {
+        alert('Введите текст для шифрования');
+        return;
+    }
+    
+    const result = caesarCipher(text, shift, true);
+    document.getElementById('caesar-result').textContent = result;
 }
 
+/**
+ * Демонстрация дешифрования Цезаря
+ */
 function decryptCaesar() {
-    const input = document.getElementById('caesar-input').value;
+    const text = document.getElementById('caesar-text').value;
     const shift = parseInt(document.getElementById('caesar-shift').value);
-    document.getElementById('caesar-output').value = caesarCipher(input, shift, false);
+    
+    if (!text.trim()) {
+        alert('Введите текст для дешифрования');
+        return;
+    }
+    
+    const result = caesarCipher(text, shift, false);
+    document.getElementById('caesar-result').textContent = result;
 }
 
-// Криптосистема Меркла-Хеллмана
-// Супервозрастающая последовательность
-const superIncreasing = [2, 3, 6, 13, 27, 52, 105, 210];
-const modulus = 881; // Должно быть больше суммы всех элементов
-const multiplier = 588; // Взаимно простое с modulus
+// Обновление значения сдвига при движении слайдера
+document.getElementById('caesar-shift').addEventListener('input', function() {
+    document.getElementById('shift-value').textContent = this.value;
+});
 
-// Генерация открытого ключа
-const publicKey = superIncreasing.map(x => (x * multiplier) % modulus);
+// ============================================
+// КРИПТОСИСТЕМА МЕРКЛА-ХЕЛЛМАНА
+// ============================================
 
+class MerkleHellman {
+    constructor(sequenceLength = 8) {
+        this.privateKey = this.generateSuperIncreasingSequence(sequenceLength);
+        this.multiplier = this.generateCoprime(100);
+        this.modulus = this.generateModulus(this.privateKey, this.multiplier);
+        this.publicKey = this.generatePublicKey();
+    }
+    
+    /**
+     * Генерация сверхрастущей последовательности
+     */
+    generateSuperIncreasingSequence(n) {
+        const sequence = [1];
+        let sum = 1;
+        
+        for (let i = 1; i < n; i++) {
+            sequence.push(sum + Math.floor(Math.random() * 10) + 1);
+            sum += sequence[i];
+        }
+        
+        return sequence;
+    }
+    
+    /**
+     * Генерация числа, взаимно простого с заданным
+     */
+    generateCoprime(max) {
+        let number;
+        do {
+            number = Math.floor(Math.random() * (max - 2)) + 2;
+        } while (this.gcd(number, max) !== 1);
+        
+        return number;
+    }
+    
+    /**
+     * Наибольший общий делитель (алгоритм Евклида)
+     */
+    gcd(a, b) {
+        while (b !== 0) {
+            const temp = b;
+            b = a % b;
+            a = temp;
+        }
+        return a;
+    }
+    
+    /**
+     * Генерация модуля, большего суммы элементов последовательности
+     */
+    generateModulus(sequence, multiplier) {
+        const sum = sequence.reduce((a, b) => a + b, 0);
+        return sum + Math.floor(Math.random() * 100) + 1;
+    }
+    
+    /**
+     * Генерация публичного ключа
+     */
+    generatePublicKey() {
+        return this.privateKey.map(num => 
+            (num * this.multiplier) % this.modulus
+        );
+    }
+    
+    /**
+     * Шифрование бинарного сообщения
+     */
+    encrypt(message) {
+        if (message.length > this.publicKey.length) {
+            throw new Error('Сообщение слишком длинное');
+        }
+        
+        let sum = 0;
+        for (let i = 0; i < message.length; i++) {
+            if (message[i] === '1') {
+                sum += this.publicKey[i];
+            }
+        }
+        
+        return sum;
+    }
+    
+    /**
+     * Дешифрование сообщения
+     */
+    decrypt(ciphertext) {
+        // Находим обратный множитель по модулю
+        const inverseMultiplier = this.modInverse(this.multiplier, this.modulus);
+        const transformed = (ciphertext * inverseMultiplier) % this.modulus;
+        
+        // Решаем задачу о рюкзаке для сверхрастущей последовательности
+        return this.solveSuperIncreasingKnapsack(transformed, this.privateKey);
+    }
+    
+    /**
+     * Нахождение обратного элемента по модулю
+     */
+    modInverse(a, m) {
+        for (let x = 1; x < m; x++) {
+            if ((a * x) % m === 1) {
+                return x;
+            }
+        }
+        return 1;
+    }
+    
+    /**
+     * Решение задачи о рюкзаке для сверхрастущей последовательности
+     */
+    solveSuperIncreasingKnapsack(sum, sequence) {
+        let result = '';
+        
+        for (let i = sequence.length - 1; i >= 0; i--) {
+            if (sum >= sequence[i]) {
+                result = '1' + result;
+                sum -= sequence[i];
+            } else {
+                result = '0' + result;
+            }
+        }
+        
+        return result.split('').reverse().join('');
+    }
+}
+
+let mhSystem = new MerkleHellman();
+
+/**
+ * Генерация новых ключей для Меркла-Хеллмана
+ */
+function generateMHKeys() {
+    mhSystem = new MerkleHellman();
+    
+    document.getElementById('mh-private-key').textContent = 
+        `Последовательность: [${mhSystem.privateKey.join(', ')}]\n` +
+        `Множитель: ${mhSystem.multiplier}, Модуль: ${mhSystem.modulus}`;
+    
+    document.getElementById('mh-public-key').textContent = 
+        `[${mhSystem.publicKey.join(', ')}]`;
+}
+
+/**
+ * Шифрование сообщения Мерклом-Хеллманом
+ */
 function encryptMH() {
-    const input = document.getElementById('mh-input').value;
-    let sum = 0;
+    const message = document.getElementById('mh-message').value;
     
-    for (let i = 0; i < input.length; i++) {
-        if (input[i] === '1') {
-            sum += publicKey[i];
-        }
+    // Проверка, что сообщение состоит только из 0 и 1
+    if (!/^[01]+$/.test(message)) {
+        alert('Сообщение должно содержать только 0 и 1');
+        return;
     }
     
-    document.getElementById('mh-output').value = sum;
-}
-
-function extendedGCD(a, b) {
-    if (a === 0) {
-        return [b, 0, 1];
+    try {
+        const ciphertext = mhSystem.encrypt(message);
+        document.getElementById('mh-result').textContent = 
+            `Зашифрованное значение: ${ciphertext}`;
+    } catch (error) {
+        alert(error.message);
     }
-    
-    const [g, x1, y1] = extendedGCD(b % a, a);
-    const x = y1 - Math.floor(b / a) * x1;
-    const y = x1;
-    
-    return [g, x, y];
 }
 
-function modInverse(a, m) {
-    const [g, x] = extendedGCD(a, m);
-    if (g !== 1) {
-        throw new Error('Обратный элемент не существует');
-    }
-    return (x % m + m) % m;
-}
-
+/**
+ * Дешифрование сообщения Мерклом-Хеллманом
+ */
 function decryptMH() {
-    const input = parseInt(document.getElementById('mh-input').value);
-    const inverseMultiplier = modInverse(multiplier, modulus);
-    let temp = (input * inverseMultiplier) % modulus;
+    const ciphertext = document.getElementById('mh-result').textContent;
+    const match = ciphertext.match(/\d+/);
     
-    let result = "";
-    
-    for (let i = superIncreasing.length - 1; i >= 0; i--) {
-        if (temp >= superIncreasing[i]) {
-            result = "1" + result;
-            temp -= superIncreasing[i];
-        } else {
-            result = "0" + result;
-        }
+    if (!match) {
+        alert('Нет зашифрованного сообщения для дешифрования');
+        return;
     }
     
-    document.getElementById('mh-output').value = result;
+    const number = parseInt(match[0]);
+    const decrypted = mhSystem.decrypt(number);
+    
+    document.getElementById('mh-result').textContent += 
+        `\nРасшифрованное сообщение: ${decrypted}`;
 }
 
-// Азбука Морзе
-const morseAlphabet = {
-    'А': '.-', 'Б': '-...', 'В': '.--', 'Г': '--.', 'Д': '-..',
-    'Е': '.', 'Ё': '.', 'Ж': '...-', 'З': '--..', 'И': '..',
-    'Й': '.---', 'К': '-.-', 'Л': '.-..', 'М': '--', 'Н': '-.',
-    'О': '---', 'П': '.--.', 'Р': '.-.', 'С': '...', 'Т': '-',
-    'У': '..-', 'Ф': '..-.', 'Х': '....', 'Ц': '-.-.', 'Ч': '---.',
-    'Ш': '----', 'Щ': '--.-', 'Ъ': '--.--', 'Ы': '-.--', 'Ь': '-..-',
-    'Э': '..-..', 'Ю': '..--', 'Я': '.-.-', ' ': '/', 
-    '0': '-----', '1': '.----', '2': '..---', '3': '...--', '4': '....-',
-    '5': '.....', '6': '-....', '7': '--...', '8': '---..', '9': '----.',
-    '.': '......', ',': '.-.-.-', '?': '..--..'
+// ============================================
+// АЗБУКА МОРЗЕ
+// ============================================
+
+// Словарь азбуки Морзе для русского алфавита
+const MORSE_CODE = {
+    'А': '.-',      'Б': '-...',    'В': '.--',     'Г': '--.',     'Д': '-..',
+    'Е': '.',       'Ё': '.',       'Ж': '...-',    'З': '--..',    'И': '..',
+    'Й': '.---',    'К': '-.-',     'Л': '.-..',    'М': '--',      'Н': '-.',
+    'О': '---',     'П': '.--.',    'Р': '.-.',     'С': '...',     'Т': '-',
+    'У': '..-',     'Ф': '..-.',    'Х': '....',    'Ц': '-.-.',    'Ч': '---.',
+    'Ш': '----',    'Щ': '--.-',    'Ъ': '--.--',   'Ы': '-.--',    'Ь': '-..-',
+    'Э': '..-..',   'Ю': '..--',    'Я': '.-.-',
+    
+    // Цифры
+    '1': '.----',   '2': '..---',   '3': '...--',   '4': '....-',   '5': '.....',
+    '6': '-....',   '7': '--...',   '8': '---..',   '9': '----.',   '0': '-----',
+    
+    // Знаки препинания
+    ' ': '/',       ',': '--..--',  '.': '.-.-.-',  '?': '..--..',  '!': '-.-.--',
+    '-': '-....-',  '/': '-..-.',   '(': '-.--.',   ')': '-.--.-',  '&': '.-...',
+    ':': '---...',  ';': '-.-.-.',  '=': '-...-',   '+': '.-.-.',   '_': '..--.-',
+    '"': '.-..-.',  '$': '...-..-', '@': '.--.-.'
 };
 
-// Обратный словарь для преобразования из Морзе
-const morseToText = {};
-for (const [key, value] of Object.entries(morseAlphabet)) {
-    morseToText[value] = key;
+// Обратный словарь для преобразования из Морзе в текст
+const REVERSE_MORSE = {};
+for (const [char, code] of Object.entries(MORSE_CODE)) {
+    REVERSE_MORSE[code] = char;
 }
 
-function textToMorse() {
-    const input = document.getElementById('morse-input').value.toUpperCase();
-    let result = "";
-    
-    for (let char of input) {
-        if (morseAlphabet[char]) {
-            result += morseAlphabet[char] + " ";
-        } else {
-            result += char + " ";
+/**
+ * Преобразование текста в код Морзе
+ * @param {string} text - Исходный текст
+ * @returns {string} - Код Морзе
+ */
+function textToMorse(text) {
+    return text.toUpperCase().split('').map(char => {
+        // Если символ есть в словаре, возвращаем его код Морзе
+        if (MORSE_CODE[char]) {
+            return MORSE_CODE[char];
         }
-    }
-    
-    document.getElementById('morse-output').value = result.trim();
+        // Иначе возвращаем сам символ
+        return char;
+    }).join(' ');
 }
 
-function morseToText() {
-    const input = document.getElementById('morse-input').value.trim();
-    const morseChars = input.split(" ");
-    let result = "";
-    
-    for (let morseChar of morseChars) {
-        if (morseToText[morseChar]) {
-            result += morseToText[morseChar];
-        } else if (morseChar === "/") {
-            result += " ";
-        } else {
-            result += morseChar;
+/**
+ * Преобразование кода Морзе в текст
+ * @param {string} morse - Код Морзе
+ * @returns {string} - Расшифрованный текст
+ */
+function morseToText(morse) {
+    return morse.split(' ').map(code => {
+        // Если код есть в обратном словаре, возвращаем символ
+        if (REVERSE_MORSE[code]) {
+            return REVERSE_MORSE[code];
         }
+        // Иначе возвращаем сам код
+        return code;
+    }).join('');
+}
+
+/**
+ * Демонстрация преобразования текста в код Морзе
+ */
+function textToMorseDemo() {
+    const text = document.getElementById('morse-text').value;
+    
+    if (!text.trim()) {
+        alert('Введите текст для преобразования');
+        return;
     }
     
-    document.getElementById('morse-output').value = result;
+    const result = textToMorse(text);
+    document.getElementById('morse-result').textContent = result;
 }
+
+/**
+ * Демонстрация преобразования кода Морзе в текст
+ */
+function morseToTextDemo() {
+    const morse = document.getElementById('morse-text').value;
+    
+    if (!morse.trim()) {
+        alert('Введите код Морзе для преобразования');
+        return;
+    }
+    
+    const result = morseToText(morse);
+    document.getElementById('morse-result').textContent = result;
+}
+
+// Привязка функций к глобальному объекту window
+window.textToMorse = textToMorseDemo;
+window.morseToText = morseToTextDemo;
+window.encryptCaesar = encryptCaesar;
+window.decryptCaesar = decryptCaesar;
+window.generateMHKeys = generateMHKeys;
+window.encryptMH = encryptMH;
+window.decryptMH = decryptMH;
+
+// Инициализация при загрузке
+document.addEventListener('DOMContentLoaded', function() {
+    // Генерация начальных ключей для Меркла-Хеллмана
+    generateMHKeys();
+    
+    // Установка примера для шифра Цезаря
+    document.getElementById('caesar-text').value = 'Привет, мир! 2024';
+    
+    // Установка примера для азбуки Морзе
+    document.getElementById('morse-text').value = 'Привет мир';
+    
+    console.log('Презентация загружена. Все алгоритмы готовы к использованию.');
+});
