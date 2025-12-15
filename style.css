@@ -1,4 +1,33 @@
-/* Основные стили презентации */
+/* ЭКСТРЕННЫЙ ФИКС ДЛЯ REVEAL.JS */
+/* Полностью отключаем pointer-events для всех слайдов кроме активного */
+.reveal .slides > section,
+.reveal .slides > section > section {
+    pointer-events: none;
+}
+
+/* Разрешаем pointer-events только для активного слайда */
+.reveal .slides > section.present,
+.reveal .slides > section > section.present {
+    pointer-events: auto;
+}
+
+/* Принудительно включаем pointer-events для всех интерактивных элементов */
+input, textarea, button, select, .demo-container, 
+.input-group, .button-group, .result-group {
+    pointer-events: auto !important;
+}
+
+/* Гарантируем, что клики проходят */
+.reveal .slides section * {
+    pointer-events: auto;
+}
+
+/* Переопределяем стили Reveal.js */
+.reveal section img,
+.reveal section video,
+.reveal section iframe {
+    pointer-events: auto;
+}/* Основные стили презентации */
 :root {
     --primary-color: #3498db;
     --secondary-color: #2ecc71;
