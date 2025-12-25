@@ -1,7 +1,3 @@
-// ============================================
-// КОНСТАНТЫ И ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
-// ============================================
-
 // Алфавит для шифра Цезаря
 const CAESAR_ALPHABET = 'АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ 1234567890,?.';
 
@@ -28,9 +24,6 @@ let currentSlideDisplay = null;
 let prevBtn = null;
 let nextBtn = null;
 
-// ============================================
-// ОСНОВНЫЕ ФУНКЦИИ НАВИГАЦИИ
-// ============================================
 
 function initNavigation() {
     slides = document.querySelectorAll('.slide');
@@ -110,9 +103,6 @@ function prevSlide() {
     }
 }
 
-// ============================================
-// ИНИЦИАЛИЗАЦИЯ ИНТЕРАКТИВНЫХ ЭЛЕМЕНТОВ
-// ============================================
 
 function initSlideInteractiveElements(slideIndex) {
     switch(slideIndex + 1) {
@@ -228,9 +218,6 @@ function initMorseDemo() {
     console.log('Демо азбуки Морзе инициализировано');
 }
 
-// ============================================
-// ШИФР ЦЕЗАРЯ
-// ============================================
 
 function caesarCipher(text, shift, encrypt = true) {
     let result = '';
@@ -304,9 +291,6 @@ function decryptCaesar() {
     }
 }
 
-// ============================================
-// КРИПТОСИСТЕМА МЕРКЛА-ХЕЛЛМАНА
-// ============================================
 
 class MerkleHellman {
     constructor(sequenceLength = 8) {
@@ -464,9 +448,6 @@ function decryptMH() {
     console.log('Расшифровано Мерклом-Хеллманом:', number, '→', decrypted);
 }
 
-// ============================================
-// АЗБУКА МОРЗЕ
-// ============================================
 
 function textToMorse(text) {
     return text.toUpperCase().split('').map(char => 
@@ -521,9 +502,6 @@ function morseToTextDemo() {
     console.log('Морзе → Текст:', morse, '→', result);
 }
 
-// ============================================
-// КЛАВИАТУРНАЯ НАВИГАЦИЯ
-// ============================================
 
 function initKeyboardNavigation() {
     document.addEventListener('keydown', function(event) {
@@ -581,9 +559,6 @@ function initKeyboardNavigation() {
     }, true);
 }
 
-// ============================================
-// ИНИЦИАЛИЗАЦИЯ ПРИ ЗАГРУЗКЕ
-// ============================================
 
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Презентация "Криптографические алгоритмы" загружается...');
@@ -614,9 +589,6 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('Готово к использованию!');
 });
 
-// ============================================
-// ЭКСПОРТ ФУНКЦИЙ ДЛЯ ГЛОБАЛЬНОГО ДОСТУПА
-// ============================================
 
 window.encryptCaesar = encryptCaesar;
 window.decryptCaesar = decryptCaesar;
