@@ -75,6 +75,7 @@
         
         .slide.active {
             display: block;
+            animation: fadeIn 0.5s ease-out;
         }
         
         /* Навигация */
@@ -345,59 +346,10 @@
             font-family: 'Courier New', monospace;
         }
         
-        /* Адаптивность */
-        @media (max-width: 768px) {
-            .content {
-                padding: 10px;
-            }
-            
-            .slide {
-                padding: 20px;
-                width: calc(100% - 20px);
-                height: calc(100% - 20px);
-            }
-            
-            h1 {
-                font-size: 2.5em;
-            }
-            
-            h2 {
-                font-size: 2em;
-            }
-            
-            .grid-container {
-                grid-template-columns: 1fr;
-            }
-            
-            .button-group {
-                flex-direction: column;
-            }
-            
-            .btn {
-                width: 100%;
-                min-width: auto;
-            }
-            
-            .navigation {
-                bottom: 10px;
-                right: 10px;
-                left: 10px;
-                justify-content: space-between;
-            }
-            
-            .slide-counter {
-                min-width: auto;
-            }
-        }
-        
         /* Анимации */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .slide.active {
-            animation: fadeIn 0.5s ease-out;
         }
         
         /* Утилиты */
@@ -445,6 +397,51 @@
             border: 3px solid white;
             box-shadow: 0 2px 6px rgba(0,0,0,0.2);
         }
+        
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .content {
+                padding: 10px;
+            }
+            
+            .slide {
+                padding: 20px;
+                width: calc(100% - 20px);
+                height: calc(100% - 20px);
+            }
+            
+            h1 {
+                font-size: 2.5em;
+            }
+            
+            h2 {
+                font-size: 2em;
+            }
+            
+            .grid-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                min-width: auto;
+            }
+            
+            .navigation {
+                bottom: 10px;
+                right: 10px;
+                left: 10px;
+                justify-content: space-between;
+            }
+            
+            .slide-counter {
+                min-width: auto;
+            }
+        }
     </style>
 </head>
 <body>
@@ -466,28 +463,28 @@
         <div class="slide" id="slide-2">
             <h2>Содержание</h2>
             <div class="menu-container">
-                <div class="menu-item" onclick="showSlide(3)">
+                <div class="menu-item" onclick="goToSlide(3)">
                     <div class="icon-large">
                         <i class="fas fa-lock"></i>
                     </div>
                     <h3>Введение в криптографию</h3>
                     <p>Основные понятия и история</p>
                 </div>
-                <div class="menu-item" onclick="showSlide(6)">
+                <div class="menu-item" onclick="goToSlide(6)">
                     <div class="icon-large">
                         <i class="fas fa-exchange-alt"></i>
                     </div>
                     <h3>Шифр Цезаря</h3>
                     <p>Древний алгоритм шифрования</p>
                 </div>
-                <div class="menu-item" onclick="showSlide(10)">
+                <div class="menu-item" onclick="goToSlide(10)">
                     <div class="icon-large">
                         <i class="fas fa-briefcase"></i>
                     </div>
                     <h3>Задача о рюкзаке</h3>
                     <p>Криптосистема Меркла-Хеллмана</p>
                 </div>
-                <div class="menu-item" onclick="showSlide(14)">
+                <div class="menu-item" onclick="goToSlide(13)">
                     <div class="icon-large">
                         <i class="fas fa-signal"></i>
                     </div>
@@ -657,13 +654,13 @@
                 </div>
                 
                 <div class="button-group">
-                    <button id="mh-generate-btn" class="btn btn-generate" onclick="generateMerkleHellmanKeys()">
+                    <button id="mh-generate-btn" class="btn btn-generate" onclick="generateMHKeys()">
                         <i class="fas fa-key"></i> Сгенерировать ключи
                     </button>
-                    <button id="mh-encrypt-btn" class="btn btn-encrypt" onclick="encryptMerkleHellman()">
+                    <button id="mh-encrypt-btn" class="btn btn-encrypt" onclick="encryptMH()">
                         <i class="fas fa-lock"></i> Зашифровать
                     </button>
-                    <button id="mh-decrypt-btn" class="btn btn-decrypt" onclick="decryptMerkleHellman()">
+                    <button id="mh-decrypt-btn" class="btn btn-decrypt" onclick="decryptMH()">
                         <i class="fas fa-unlock"></i> Расшифровать
                     </button>
                 </div>
@@ -769,10 +766,10 @@
                 </div>
                 
                 <div class="button-group">
-                    <button id="text-to-morse-btn" class="btn btn-encrypt" onclick="textToMorse()">
+                    <button id="text-to-morse-btn" class="btn btn-encrypt" onclick="textToMorseDemo()">
                         <i class="fas fa-long-arrow-alt-right"></i> Текст → Морзе
                     </button>
-                    <button id="morse-to-text-btn" class="btn btn-decrypt" onclick="morseToText()">
+                    <button id="morse-to-text-btn" class="btn btn-decrypt" onclick="morseToTextDemo()">
                         <i class="fas fa-long-arrow-alt-left"></i> Морзе → Текст
                     </button>
                 </div>
@@ -846,19 +843,18 @@ function caesarCipher(text, shift, encrypt = true) {
                         <p><strong>Автор:</strong> Лялин Александр Владимирович</p>
                         <p><strong>Группа:</strong> МиКН</p>
                         <p><strong>Дата:</strong> <span id="presentation-date"></span></p>
-                        
                     </div>
                     
                     <div class="note mt-30">
                         <p><i class="fas fa-laptop-code"></i> Презентация создана с использованием HTML5, CSS3 и JavaScript</p>
-                        
+                        <p><i class="fas fa-book"></i> Исследование охватывает исторические и современные криптографические алгоритмы</p>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Навигация -->
-       <div class="navigation">
+        <div class="navigation">
             <button id="prev-btn" class="nav-btn">
                 <i class="fas fa-arrow-left"></i> Назад
             </button>
@@ -874,101 +870,25 @@ function caesarCipher(text, shift, encrypt = true) {
     <!-- Scripts -->
     <script src="script.js"></script>
     <script>
-         // Установка текущей даты
+        // Установка текущей даты
         const currentDate = new Date();
         const formattedDate = currentDate.toLocaleDateString('ru-RU', {
             day: 'numeric',
             month: 'long',
             year: 'numeric'
         });
+        
         document.getElementById('current-date').textContent = formattedDate;
-        document.getElementById('presentation-date').textContent = formattedDate
-        
-        // Функции навигации по слайдам
-        let currentSlide = 1;
-        const totalSlides = 15;
-        
-        function showSlide(n) {
-            // Скрыть текущий слайд
-            document.querySelectorAll('.slide').forEach(slide => {
-                slide.classList.remove('active');
-            });
-            
-            // Показать выбранный слайд
-            const slide = document.getElementById(`slide-${n}`);
-            if (slide) {
-                slide.classList.add('active');
-                currentSlide = n;
-                updateNavigation();
-            }
-        }
-        
-        function nextSlide() {
-            if (currentSlide < totalSlides) {
-                showSlide(currentSlide + 1);
-            }
-        }
-        
-        function prevSlide() {
-            if (currentSlide > 1) {
-                showSlide(currentSlide - 1);
-            }
-        }
-        
-        function updateNavigation() {
-            document.getElementById('current-slide').textContent = currentSlide;
-            document.getElementById('prev-btn').disabled = currentSlide === 1;
-            document.getElementById('next-btn').disabled = currentSlide === totalSlides;
-        }
-        
-        // Инициализация навигации
-        document.addEventListener('DOMContentLoaded', () => {
-            updateNavigation();
-            
-            // Добавление обработчиков клавиш
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'ArrowLeft') prevSlide();
-                if (e.key === 'ArrowRight') nextSlide();
-                if (e.key === 'Escape') showSlide(2); // Вернуться к содержанию
-            });
-        });
+        document.getElementById('presentation-date').textContent = formattedDate;
         
         // Обновление значения сдвига для шифра Цезаря
         function updateShiftValue(value) {
             document.getElementById('shift-value').textContent = value;
         }
         
-        // Базовые функции для демонстраций (заглушки)
-        function encryptCaesar() {
-            const text = document.getElementById('caesar-text').value;
-            const shift = parseInt(document.getElementById('caesar-shift').value);
-            // Реализация в script.js
-        }
-        
-        function decryptCaesar() {
-            const text = document.getElementById('caesar-text').value;
-            const shift = parseInt(document.getElementById('caesar-shift').value);
-            // Реализация в script.js
-        }
-        
-        function generateMerkleHellmanKeys() {
-            // Реализация в script.js
-        }
-        
-        function encryptMerkleHellman() {
-            // Реализация в script.js
-        }
-        
-        function decryptMerkleHellman() {
-            // Реализация в script.js
-        }
-        
-        function textToMorse() {
-            // Реализация в script.js
-        }
-        
-        function morseToText() {
-            // Реализация в script.js
+        // Функция для перехода к слайду из меню
+        function goToSlide(slideNumber) {
+            window.showSlide(slideNumber);
         }
     </script>
 </body>
