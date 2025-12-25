@@ -1,37 +1,118 @@
 // ============================================
+// НАВИГАЦИЯ И ОСНОВНОЙ СКРИПТ ПРЕЗЕНТАЦИИ
+// ============================================
+
+let currentSlideIndex = 0;
+const slides = document.querySelectorAll('.slide');
+const totalSlides = slides.length;
+const currentSlideDisplay = document.getElementById('current-slide');
+const prevBtn = document.getElementById('prev-btn');
+const nextBtn = document.getElementById('next-btn');
+
+// Инициализация навигации
+function initNavigation() {
+    if (prevBtn) {
+        prevBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            prevSlide();
+        });
+    }
+    
+    if (nextBtn) {
+        nextBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            nextSlide();
+        });
+    }
+    
+    // Показываем первый слайд
+    showSlide(0);
+}
+
+function showSlide(index) {
+    if (index < 0) index = 0;
+    if (index >= totalSlides) index = totalSlides - 1;
+    
+    slides.forEach(slide => {
+        slide.classList.remove('active');
+        slide.style.display = 'none';
+    });
+    
+    slides[index].classList.add('active');
+    slides[index].style.display = 'block';
+    
+    currentSlideIndex = index;
+    
+    // Обновляем отображение номера слайда
+    if (currentSlideDisplay) {
+        currentSlideDisplay.textContent = `${currentSlideIndex + 1} / ${totalSlides}`;
+    }
+    
+    updateButtons();
+    
+    // Инициализируем интерактивные элементы на текущем слайде
+    setTimeout(() => initSlideInteractiveElements(index), 100);
+}
+
+function updateButtons() {
+    if (prevBtn) {
+        prevBtn.disabled = currentSlideIndex === 0;
+        prevBtn.style.opacity = prevBtn.disabled ? '0.5' : '1';
+        prevBtn.style.cursor = prevBtn.disabled ? 'not-allowed' : 'pointer';
+    }
+    
+    if (nextBtn) {
+        nextBtn.disabled = currentSlideIndex === totalSlides - 1;
+        nextBtn.style.opacity = nextBtn.disabled ? '0.5' : '1';
+        nextBtn.style.cursor = nextBtn.disabled ? 'not-allowed' : 'pointer';
+    }
+}
+
+function nextSlide() {
+    if (currentSlideIndex < totalSlides - 1) {
+        showSlide(currentSlideIndex + 1);
+    }
+}
+
+function prevSlide() {
+    if (currentSlideIndex > 0) {
+        showSlide(currentSlideIndex - 1);
+    }
+}
+
+// ============================================
 // ИНИЦИАЛИЗАЦИЯ ИНТЕРАКТИВНЫХ ЭЛЕМЕНТОВ
 // ============================================
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Ждем полной загрузки Reveal.js
-    setTimeout(function() {
-        initInteractiveElements();
-    }, 1000);
-    
-    // Также инициализируем при смене слайда
-    Reveal.addEventListener('slidechanged', function(event) {
-        setTimeout(initInteractiveElements, 100);
-    });
-});
+function initSlideInteractiveElements(slideIndex) {
+    switch(slideIndex + 1) {
+        case 7: // Демонстрация шифра Цезаря
+            initCaesarDemo();
+            break;
+        case 11: // Демонстрация Меркла-Хеллмана
+            initMHDemo();
+            break;
+        case 14: // Демонстрация азбуки Морзе
+            initMorseDemo();
+            break;
+    }
+}
 
-function initInteractiveElements() {
-    console.log('Инициализация интерактивных элементов...');
-    
-    // Шифр Цезаря
+function initCaesarDemo() {
     const caesarText = document.getElementById('caesar-text');
     const caesarShift = document.getElementById('caesar-shift');
     const shiftValue = document.getElementById('shift-value');
     const encryptBtn = document.getElementById('encrypt-btn');
     const decryptBtn = document.getElementById('decrypt-btn');
     
-    if (caesarShift && shiftValue) {
+    if (caesarText && caesarShift && shiftValue) {
         // Обновление значения сдвига
         caesarShift.addEventListener('input', function(e) {
             e.stopPropagation();
-            shiftValue.textContent = this.value;
+            if (shiftValue) shiftValue.textContent = this.value;
         });
         
-        // Обработка кликов с остановкой распространения
+        // Инициализация кнопок
         if (encryptBtn) {
             encryptBtn.addEventListener('click', function(e) {
                 e.stopPropagation();
@@ -50,35 +131,82 @@ function initInteractiveElements() {
         
         // Разрешаем ввод в текстовых полях
         if (caesarText) {
-            caesarText.addEventListener('click', function(e) {
+            caesarText.addEventListener('mousedown', function(e) {
                 e.stopPropagation();
             });
             
             caesarText.addEventListener('keydown', function(e) {
                 e.stopPropagation();
             });
-            
-            caesarText.addEventListener('touchstart', function(e) {
-                e.stopPropagation();
-            });
-           }
-    
-    // Аналогично для других интерактивных элементов...
+        }
+        
+        console.log('Инициализирована демонстрация шифра Цезаря');
+    }
 }
+
+function initMHDemo() {
+    const mhMessage = document.getElementById('mh-message');
+    const mhGenerateBtn = document.getElementById('mh-generate-btn');
+    const mhEncryptBtn = document.getElementById('mh-encrypt-btn');
+    const mhDecryptBtn = document.getElementById('mh-decrypt-btn');
+    
+    if (mhGenerateBtn) {
+        mhGenerateBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            generateMHKeys();
+        });
+    }
+    
+    if (mhEncryptBtn) {
+        mhEncryptBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            encryptMH();
+        });
+    }
+    
+    if (mhDecryptBtn) {
+        mhDecryptBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            decryptMH();
+        });
+    }
+    
+    console.log('Инициализирована демонстрация Меркла-Хеллмана');
+}
+
+function initMorseDemo() {
+    const morseText = document.getElementById('morse-text');
+    const morseToTextBtn = document.getElementById('morse-to-text-btn');
+    const textToMorseBtn = document.getElementById('text-to-morse-btn');
+    
+    if (textToMorseBtn) {
+        textToMorseBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            textToMorseDemo();
+        });
+    }
+    
+    if (morseToTextBtn) {
+        morseToTextBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            morseToTextDemo();
+        });
+    }
+    
+    console.log('Инициализирована демонстрация азбуки Морзе');
+}
+
 // ============================================
-// ШИФР ЦЕЗАРЯ
+// ШИФР ЦЕЗАРЯ (сохраняем вашу реализацию)
 // ============================================
 
-// Алфавит из 47 символов: 33 русские буквы + 10 цифр + 4 знака препинания
 const CAESAR_ALPHABET = 'АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ 1234567890,?.';
 
-/**
- * Шифрование/дешифрование шифром Цезаря
- * @param {string} text - Исходный текст
- * @param {number} shift - Величина сдвига
- * @param {boolean} encrypt - true для шифрования, false для дешифрования
- * @returns {string} - Результат шифрования/дешифрования
- */
 function caesarCipher(text, shift, encrypt = true) {
     let result = '';
     const n = CAESAR_ALPHABET.length;
@@ -103,45 +231,40 @@ function caesarCipher(text, shift, encrypt = true) {
     return result;
 }
 
-/**
- * Демонстрация шифрования Цезаря
- */
 function encryptCaesar() {
-    const text = document.getElementById('caesar-text').value;
-    const shift = parseInt(document.getElementById('caesar-shift').value);
+    const text = document.getElementById('caesar-text');
+    const shift = document.getElementById('caesar-shift');
+    const result = document.getElementById('caesar-result');
     
-    if (!text.trim()) {
-        alert('Введите текст для шифрования');
+    if (!text || !shift || !result) {
+        console.error('Элементы шифра Цезаря не найдены');
         return;
     }
     
-    const result = caesarCipher(text, shift, true);
-    document.getElementById('caesar-result').textContent = result;
+    const encrypted = caesarCipher(text.value, parseInt(shift.value), true);
+    result.textContent = encrypted;
+    
+    console.log('Зашифровано:', text.value, '→', encrypted);
 }
 
-/**
- * Демонстрация дешифрования Цезаря
- */
 function decryptCaesar() {
-    const text = document.getElementById('caesar-text').value;
-    const shift = parseInt(document.getElementById('caesar-shift').value);
+    const text = document.getElementById('caesar-text');
+    const shift = document.getElementById('caesar-shift');
+    const result = document.getElementById('caesar-result');
     
-    if (!text.trim()) {
-        alert('Введите текст для дешифрования');
+    if (!text || !shift || !result) {
+        console.error('Элементы шифра Цезаря не найдены');
         return;
     }
     
-    const result = caesarCipher(text, shift, false);
-    document.getElementById('caesar-result').textContent = result;
+    const decrypted = caesarCipher(text.value, parseInt(shift.value), false);
+    result.textContent = decrypted;
+    
+    console.log('Расшифровано:', text.value, '→', decrypted);
 }
-
-// Обновление значения сдвига при движении слайдера
-document.getElementById('caesar-shift').addEventListener('input', function() {
-    document.getElementById('shift-value').textContent = this.value;
-});
 
 // ============================================
-// КРИПТОСИСТЕМА МЕРКЛА-ХЕЛЛМАНА
+// КРИПТОСИСТЕМА МЕРКЛА-ХЕЛЛМАНА (сохраняем вашу реализацию)
 // ============================================
 
 class MerkleHellman {
@@ -152,9 +275,6 @@ class MerkleHellman {
         this.publicKey = this.generatePublicKey();
     }
     
-    /**
-     * Генерация сверхрастущей последовательности
-     */
     generateSuperIncreasingSequence(n) {
         const sequence = [1];
         let sum = 1;
@@ -167,9 +287,6 @@ class MerkleHellman {
         return sequence;
     }
     
-    /**
-     * Генерация числа, взаимно простого с заданным
-     */
     generateCoprime(max) {
         let number;
         do {
@@ -179,9 +296,6 @@ class MerkleHellman {
         return number;
     }
     
-    /**
-     * Наибольший общий делитель (алгоритм Евклида)
-     */
     gcd(a, b) {
         while (b !== 0) {
             const temp = b;
@@ -191,26 +305,17 @@ class MerkleHellman {
         return a;
     }
     
-    /**
-     * Генерация модуля, большего суммы элементов последовательности
-     */
     generateModulus(sequence, multiplier) {
         const sum = sequence.reduce((a, b) => a + b, 0);
         return sum + Math.floor(Math.random() * 100) + 1;
     }
     
-    /**
-     * Генерация публичного ключа
-     */
     generatePublicKey() {
         return this.privateKey.map(num => 
             (num * this.multiplier) % this.modulus
         );
     }
     
-    /**
-     * Шифрование бинарного сообщения
-     */
     encrypt(message) {
         if (message.length > this.publicKey.length) {
             throw new Error('Сообщение слишком длинное');
@@ -226,21 +331,13 @@ class MerkleHellman {
         return sum;
     }
     
-    /**
-     * Дешифрование сообщения
-     */
     decrypt(ciphertext) {
-        // Находим обратный множитель по модулю
         const inverseMultiplier = this.modInverse(this.multiplier, this.modulus);
         const transformed = (ciphertext * inverseMultiplier) % this.modulus;
         
-        // Решаем задачу о рюкзаке для сверхрастущей последовательности
         return this.solveSuperIncreasingKnapsack(transformed, this.privateKey);
     }
     
-    /**
-     * Нахождение обратного элемента по модулю
-     */
     modInverse(a, m) {
         for (let x = 1; x < m; x++) {
             if ((a * x) % m === 1) {
@@ -250,9 +347,6 @@ class MerkleHellman {
         return 1;
     }
     
-    /**
-     * Решение задачи о рюкзаке для сверхрастущей последовательности
-     */
     solveSuperIncreasingKnapsack(sum, sequence) {
         let result = '';
         
@@ -271,27 +365,31 @@ class MerkleHellman {
 
 let mhSystem = new MerkleHellman();
 
-/**
- * Генерация новых ключей для Меркла-Хеллмана
- */
 function generateMHKeys() {
     mhSystem = new MerkleHellman();
     
-    document.getElementById('mh-private-key').textContent = 
-        `Последовательность: [${mhSystem.privateKey.join(', ')}]\n` +
-        `Множитель: ${mhSystem.multiplier}, Модуль: ${mhSystem.modulus}`;
+    const privateKeyDiv = document.getElementById('mh-private-key');
+    const publicKeyDiv = document.getElementById('mh-public-key');
     
-    document.getElementById('mh-public-key').textContent = 
-        `[${mhSystem.publicKey.join(', ')}]`;
+    if (privateKeyDiv && publicKeyDiv) {
+        privateKeyDiv.textContent = `Последовательность: [${mhSystem.privateKey.join(', ')}]\nМножитель: ${mhSystem.multiplier}, Модуль: ${mhSystem.modulus}`;
+        publicKeyDiv.textContent = `[${mhSystem.publicKey.join(', ')}]`;
+    }
+    
+    console.log('Сгенерированы новые ключи Меркла-Хеллмана');
 }
 
-/**
- * Шифрование сообщения Мерклом-Хеллманом
- */
 function encryptMH() {
-    const message = document.getElementById('mh-message').value;
+    const messageInput = document.getElementById('mh-message');
+    const resultDiv = document.getElementById('mh-result');
     
-    // Проверка, что сообщение состоит только из 0 и 1
+    if (!messageInput || !resultDiv) {
+        console.error('Элементы Меркла-Хеллмана не найдены');
+        return;
+    }
+    
+    const message = messageInput.value;
+    
     if (!/^[01]+$/.test(message)) {
         alert('Сообщение должно содержать только 0 и 1');
         return;
@@ -299,144 +397,201 @@ function encryptMH() {
     
     try {
         const ciphertext = mhSystem.encrypt(message);
-        document.getElementById('mh-result').textContent = 
-            `Зашифрованное значение: ${ciphertext}`;
+        resultDiv.textContent = `Зашифрованное значение: ${ciphertext}`;
+        console.log('Зашифровано Мерклом-Хеллманом:', message, '→', ciphertext);
     } catch (error) {
         alert(error.message);
     }
 }
 
-/**
- * Дешифрование сообщения Мерклом-Хеллманом
- */
 function decryptMH() {
-    const ciphertext = document.getElementById('mh-result').textContent;
-    const match = ciphertext.match(/\d+/);
+    const resultDiv = document.getElementById('mh-result');
     
-    if (!match) {
+    if (!resultDiv) return;
+    
+    const ciphertext = resultDiv.textContent.match(/\d+/);
+    
+    if (!ciphertext) {
         alert('Нет зашифрованного сообщения для дешифрования');
         return;
     }
     
-    const number = parseInt(match[0]);
+    const number = parseInt(ciphertext[0]);
     const decrypted = mhSystem.decrypt(number);
     
-    document.getElementById('mh-result').textContent += 
-        `\nРасшифрованное сообщение: ${decrypted}`;
+    resultDiv.textContent += `\nРасшифрованное сообщение: ${decrypted}`;
+    console.log('Расшифровано Мерклом-Хеллманом:', number, '→', decrypted);
 }
 
 // ============================================
-// АЗБУКА МОРЗЕ
+// АЗБУКА МОРЗЕ (сохраняем вашу реализацию)
 // ============================================
 
-// Словарь азбуки Морзе для русского алфавита
 const MORSE_CODE = {
-    'А': '.-',      'Б': '-...',    'В': '.--',     'Г': '--.',     'Д': '-..',
-    'Е': '.',       'Ё': '.',       'Ж': '...-',    'З': '--..',    'И': '..',
-    'Й': '.---',    'К': '-.-',     'Л': '.-..',    'М': '--',      'Н': '-.',
-    'О': '---',     'П': '.--.',    'Р': '.-.',     'С': '...',     'Т': '-',
-    'У': '..-',     'Ф': '..-.',    'Х': '....',    'Ц': '-.-.',    'Ч': '---.',
-    'Ш': '----',    'Щ': '--.-',    'Ъ': '--.--',   'Ы': '-.--',    'Ь': '-..-',
-    'Э': '..-..',   'Ю': '..--',    'Я': '.-.-',
-    
-    // Цифры
-    '1': '.----',   '2': '..---',   '3': '...--',   '4': '....-',   '5': '.....',
-    '6': '-....',   '7': '--...',   '8': '---..',   '9': '----.',   '0': '-----',
-    
-    // Знаки препинания
-    ' ': '/',       ',': '--..--',  '.': '.-.-.-',  '?': '..--..',  '!': '-.-.--',
-    '-': '-....-',  '/': '-..-.',   '(': '-.--.',   ')': '-.--.-',  '&': '.-...',
-    ':': '---...',  ';': '-.-.-.',  '=': '-...-',   '+': '.-.-.',   '_': '..--.-',
-    '"': '.-..-.',  '$': '...-..-', '@': '.--.-.'
+    'А': '.-', 'Б': '-...', 'В': '.--', 'Г': '--.', 'Д': '-..',
+    'Е': '.', 'Ё': '.', 'Ж': '...-', 'З': '--..', 'И': '..',
+    'Й': '.---', 'К': '-.-', 'Л': '.-..', 'М': '--', 'Н': '-.',
+    'О': '---', 'П': '.--.', 'Р': '.-.', 'С': '...', 'Т': '-',
+    'У': '..-', 'Ф': '..-.', 'Х': '....', 'Ц': '-.-.', 'Ч': '---.',
+    'Ш': '----', 'Щ': '--.-', 'Ъ': '--.--', 'Ы': '-.--', 'Ь': '-..-',
+    'Э': '..-..', 'Ю': '..--', 'Я': '.-.-',
+    '1': '.----', '2': '..---', '3': '...--', '4': '....-',
+    '5': '.....', '6': '-....', '7': '--...', '8': '---..',
+    '9': '----.', '0': '-----',
+    ' ': '/', ',': '--..--', '.': '.-.-.-', '?': '..--..', '!': '-.-.--'
 };
 
-// Обратный словарь для преобразования из Морзе в текст
-const REVERSE_MORSE = {};
-for (const [char, code] of Object.entries(MORSE_CODE)) {
-    REVERSE_MORSE[code] = char;
-}
-
-/**
- * Преобразование текста в код Морзе
- * @param {string} text - Исходный текст
- * @returns {string} - Код Морзе
- */
 function textToMorse(text) {
-    return text.toUpperCase().split('').map(char => {
-        // Если символ есть в словаре, возвращаем его код Морзе
-        if (MORSE_CODE[char]) {
-            return MORSE_CODE[char];
-        }
-        // Иначе возвращаем сам символ
-        return char;
-    }).join(' ');
+    return text.toUpperCase().split('').map(char => 
+        MORSE_CODE[char] || char
+    ).join(' ');
 }
 
-/**
- * Преобразование кода Морзе в текст
- * @param {string} morse - Код Морзе
- * @returns {string} - Расшифрованный текст
- */
 function morseToText(morse) {
-    return morse.split(' ').map(code => {
-        // Если код есть в обратном словаре, возвращаем символ
-        if (REVERSE_MORSE[code]) {
-            return REVERSE_MORSE[code];
-        }
-        // Иначе возвращаем сам код
-        return code;
-    }).join('');
+    const morseToChar = {};
+    for (const [char, code] of Object.entries(MORSE_CODE)) {
+        morseToChar[code] = char;
+    }
+    
+    return morse.split(' ').map(code => 
+        morseToChar[code] || code
+    ).join('');
 }
 
-/**
- * Демонстрация преобразования текста в код Морзе
- */
 function textToMorseDemo() {
-    const text = document.getElementById('morse-text').value;
+    const textInput = document.getElementById('morse-text');
+    const resultDiv = document.getElementById('morse-result');
     
-    if (!text.trim()) {
-        alert('Введите текст для преобразования');
+    if (!textInput || !resultDiv) {
+        console.error('Элементы азбуки Морзе не найдены');
         return;
     }
     
+    const text = textInput.value;
     const result = textToMorse(text);
-    document.getElementById('morse-result').textContent = result;
+    resultDiv.textContent = result;
+    
+    console.log('Текст → Морзе:', text, '→', result);
 }
 
-/**
- * Демонстрация преобразования кода Морзе в текст
- */
 function morseToTextDemo() {
-    const morse = document.getElementById('morse-text').value;
+    const textInput = document.getElementById('morse-text');
+    const resultDiv = document.getElementById('morse-result');
     
-    if (!morse.trim()) {
-        alert('Введите код Морзе для преобразования');
+    if (!textInput || !resultDiv) {
+        console.error('Элементы азбуки Морзе не найдены');
         return;
     }
     
+    const morse = textInput.value;
     const result = morseToText(morse);
-    document.getElementById('morse-result').textContent = result;
+    resultDiv.textContent = result;
+    
+    console.log('Морзе → Текст:', morse, '→', result);
 }
 
-// Привязка функций к глобальному объекту window
-window.textToMorse = textToMorseDemo;
-window.morseToText = morseToTextDemo;
+// ============================================
+// КЛАВИАТУРНАЯ НАВИГАЦИЯ
+// ============================================
+
+function initKeyboardNavigation() {
+    document.addEventListener('keydown', function(event) {
+        // Проверяем, не находится ли фокус в интерактивном элементе
+        const activeElement = document.activeElement;
+        const isInteractive = activeElement && (
+            activeElement.tagName === 'INPUT' ||
+            activeElement.tagName === 'TEXTAREA' ||
+            activeElement.tagName === 'BUTTON' ||
+            activeElement.tagName === 'SELECT'
+        );
+        
+        // Если элемент интерактивный, не перехватываем навигационные клавиши
+        if (isInteractive) {
+            // Разрешаем только стрелки вверх/вниз для навигации в текстовых полях
+            if (activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA') {
+                if (event.key === 'ArrowLeft' || event.key === 'ArrowRight' || 
+                    event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+                    return true;
+                }
+            }
+            // Для кнопок и select разрешаем только Enter/Space
+            if (event.key !== 'Enter' && event.key !== ' ' && event.key !== 'Spacebar') {
+                event.stopPropagation();
+            }
+            return;
+        }
+        
+        // Обработка навигации по презентации
+        switch(event.key) {
+            case 'ArrowLeft':
+            case 'PageUp':
+                event.preventDefault();
+                prevSlide();
+                break;
+                
+            case 'ArrowRight':
+            case 'PageDown':
+                event.preventDefault();
+                nextSlide();
+                break;
+                
+            case 'Home':
+                event.preventDefault();
+                showSlide(0);
+                break;
+                
+            case 'End':
+                event.preventDefault();
+                showSlide(totalSlides - 1);
+                break;
+                
+            case ' ':
+            case 'Spacebar':
+                event.preventDefault();
+                nextSlide();
+                break;
+        }
+    }, true); // Используем capture phase для перехвата событий
+}
+
+// ============================================
+// ИНИЦИАЛИЗАЦИЯ ПРИ ЗАГРУЗКЕ
+// ============================================
+
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Презентация "Криптографические алгоритмы" загружается...');
+    
+    // Инициализация навигации
+    initNavigation();
+    
+    // Инициализация клавиатурной навигации
+    initKeyboardNavigation();
+    
+    // Генерация начальных ключей для Меркла-Хеллмана
+    generateMHKeys();
+    
+    // Автоматическое шифрование примера при загрузке
+    setTimeout(() => {
+        if (document.getElementById('caesar-text')) {
+            encryptCaesar();
+        }
+        
+        if (document.getElementById('morse-text')) {
+            textToMorseDemo();
+        }
+    }, 500);
+    
+    console.log(`Презентация загружена. Всего слайдов: ${totalSlides}`);
+    console.log('Готово к использованию!');
+});
+
+// Экспорт функций для глобального доступа
 window.encryptCaesar = encryptCaesar;
 window.decryptCaesar = decryptCaesar;
 window.generateMHKeys = generateMHKeys;
 window.encryptMH = encryptMH;
 window.decryptMH = decryptMH;
-
-// Инициализация при загрузке
-document.addEventListener('DOMContentLoaded', function() {
-    // Генерация начальных ключей для Меркла-Хеллмана
-    generateMHKeys();
-    
-    // Установка примера для шифра Цезаря
-    document.getElementById('caesar-text').value = 'Привет, мир! 2024';
-    
-    // Установка примера для азбуки Морзе
-    document.getElementById('morse-text').value = 'Привет мир';
-    
-    console.log('Презентация загружена. Все алгоритмы готовы к использованию.');
-});
+window.textToMorseDemo = textToMorseDemo;
+window.morseToTextDemo = morseToTextDemo;
+window.nextSlide = nextSlide;
+window.prevSlide = prevSlide;
