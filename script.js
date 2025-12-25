@@ -1,4 +1,218 @@
 // ============================================
+// ДОПОЛНИТЕЛЬНЫЕ ФУНКЦИИ ДЛЯ ИНТЕРАКТИВНОСТИ
+// ============================================
+
+// Включение режима демо (отключает навигацию)
+function enableDemoMode() {
+    // Временно отключаем навигацию по презентации
+    document.addEventListener('keydown', blockNavigation, true);
+}
+
+// Отключение режима демо
+function disableDemoMode() {
+    document.removeEventListener('keydown', blockNavigation, true);
+}
+
+// Блокировка навигационных клавиш
+function blockNavigation(e) {
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowRight' || 
+        e.key === 'PageUp' || e.key === 'PageDown' ||
+        e.key === ' ' || e.key === 'Spacebar') {
+        e.stopPropagation();
+        e.preventDefault();
+    }
+}
+
+// Обновление значения сдвига
+function updateShiftValue(value) {
+    const shiftValue = document.getElementById('shift-value');
+    if (shiftValue) {
+        shiftValue.textContent = value;
+    }
+}
+
+// ============================================
+// ОБНОВЛЕННЫЕ ФУНКЦИИ ШИФРА ЦЕЗАРЯ
+// ============================================
+
+function encryptCaesar() {
+    try {
+        const text = document.getElementById('caesar-text').value;
+        const shift = parseInt(document.getElementById('caesar-shift').value);
+        const result = document.getElementById('caesar-result');
+        
+        if (!text.trim()) {
+            alert('Введите текст для шифрования');
+            return false;
+        }
+        
+        const encrypted = caesarCipher(text, shift, true);
+        result.textContent = encrypted;
+        result.style.color = '#2ecc71';
+        
+        console.log('Зашифровано:', text, '→', encrypted);
+        return false; // Предотвращаем всплытие события
+    } catch (error) {
+        console.error('Ошибка при шифровании:', error);
+        return false;
+    }
+}
+
+function decryptCaesar() {
+    try {
+        const text = document.getElementById('caesar-text').value;
+        const shift = parseInt(document.getElementById('caesar-shift').value);
+        const result = document.getElementById('caesar-result');
+        
+        if (!text.trim()) {
+            alert('Введите текст для дешифрования');
+            return false;
+        }
+        
+        const decrypted = caesarCipher(text, shift, false);
+        result.textContent = decrypted;
+        result.style.color = '#f39c12';
+        
+        console.log('Расшифровано:', text, '→', decrypted);
+        return false; // Предотвращаем всплытие события
+    } catch (error) {
+        console.error('Ошибка при дешифровании:', error);
+        return false;
+    }
+}
+
+// ============================================
+// ОБНОВЛЕННАЯ ИНИЦИАЛИЗАЦИЯ СЛАЙДА
+// ============================================
+
+function initCaesarDemo() {
+    console.log('Инициализация демо шифра Цезаря...');
+    
+    const caesarText = document.getElementById('caesar-text');
+    const caesarShift = document.getElementById('caesar-shift');
+    const shiftValue = document.getElementById('shift-value');
+    
+    if (caesarText && caesarShift && shiftValue) {
+        // Устанавливаем начальное значение
+        updateShiftValue(caesarShift.value);
+        
+        // Обновление значения сдвига при движении ползунка
+        caesarShift.addEventListener('input', function(e) {
+            e.stopPropagation();
+            updateShiftValue(this.value);
+        });
+        
+        // Обработка кликов на кнопках
+        const encryptBtn = document.querySelector('#slide-7 .btn-encrypt');
+        const decryptBtn = document.querySelector('#slide-7 .btn-decrypt');
+        
+        if (encryptBtn) {
+            encryptBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                e.preventDefault();
+                encryptCaesar();
+            });
+        }
+        
+        if (decryptBtn) {
+            decryptBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                e.preventDefault();
+                decryptCaesar();
+            });
+        }
+        
+        // Автоматическое шифрование при загрузке
+        setTimeout(() => {
+            if (caesarText.value) {
+                encryptCaesar();
+            }
+        }, 500);
+        
+        console.log('Демо шифра Цезаря инициализировано');
+    } else {
+        console.error('Не найдены элементы демо шифра Цезаря');
+    }
+}
+
+// ============================================
+// ОБНОВЛЕННАЯ ФУНКЦИЯ ПОКАЗА СЛАЙДА
+// ============================================
+
+function showSlide(index) {
+    if (index < 0) index = 0;
+    if (index >= totalSlides) index = totalSlides - 1;
+    
+    // Скрываем все слайды
+    slides.forEach(slide => {
+        slide.classList.remove('active');
+        slide.style.display = 'none';
+    });
+    
+    // Показываем выбранный слайд
+    slides[index].classList.add('active');
+    slides[index].style.display = 'block';
+    
+    currentSlideIndex = index;
+    
+    // Обновляем отображение номера слайда
+    if (currentSlideDisplay) {
+        currentSlideDisplay.textContent = `${currentSlideIndex + 1} / ${totalSlides}`;
+    }
+    
+    updateButtons();
+    
+    // Инициализируем интерактивные элементы на текущем слайде
+    setTimeout(() => {
+        switch(index) {
+            case 6: // Слайд 7 (индекс 6)
+                initCaesarDemo();
+                break;
+            case 9: // Слайд 10 (индекс 9)
+                initMHDemo();
+                break;
+            case 12: // Слайд 13 (индекс 12)
+                initMorseDemo();
+                break;
+        }
+    }, 100);
+}
+
+// ============================================
+// ОБНОВЛЕННАЯ ИНИЦИАЛИЗАЦИЯ ПРИ ЗАГРУЗКЕ
+// ============================================
+
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Презентация "Криптографические алгоритмы" загружается...');
+    
+    // Инициализация навигации
+    if (prevBtn && nextBtn) {
+        prevBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            disableDemoMode();
+            prevSlide();
+        });
+        
+        nextBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            disableDemoMode();
+            nextSlide();
+        });
+    }
+    
+    // Показываем первый слайд
+    showSlide(0);
+    
+    // Инициализация клавиатурной навигации
+    initKeyboardNavigation();
+    
+    // Генерация начальных ключей для Меркла-Хеллмана
+    setTimeout(generateMHKeys, 500);
+    
+    console.log(`Презентация загружена. Всего слайдов: ${totalSlides}`);
+});
+
+// ============================================
 // НАВИГАЦИЯ И ОСНОВНОЙ СКРИПТ ПРЕЗЕНТАЦИИ
 // ============================================
 
