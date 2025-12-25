@@ -1,230 +1,44 @@
 // ============================================
-// ДОПОЛНИТЕЛЬНЫЕ ФУНКЦИИ ДЛЯ ИНТЕРАКТИВНОСТИ
+// КОНСТАНТЫ И ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
 // ============================================
 
-// Включение режима демо (отключает навигацию)
-function enableDemoMode() {
-    // Временно отключаем навигацию по презентации
-    document.addEventListener('keydown', blockNavigation, true);
-}
+// Алфавит для шифра Цезаря
+const CAESAR_ALPHABET = 'АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ 1234567890,?.';
 
-// Отключение режима демо
-function disableDemoMode() {
-    document.removeEventListener('keydown', blockNavigation, true);
-}
+// Код Морзе
+const MORSE_CODE = {
+    'А': '.-', 'Б': '-...', 'В': '.--', 'Г': '--.', 'Д': '-..',
+    'Е': '.', 'Ё': '.', 'Ж': '...-', 'З': '--..', 'И': '..',
+    'Й': '.---', 'К': '-.-', 'Л': '.-..', 'М': '--', 'Н': '-.',
+    'О': '---', 'П': '.--.', 'Р': '.-.', 'С': '...', 'Т': '-',
+    'У': '..-', 'Ф': '..-.', 'Х': '....', 'Ц': '-.-.', 'Ч': '---.',
+    'Ш': '----', 'Щ': '--.-', 'Ъ': '--.--', 'Ы': '-.--', 'Ь': '-..-',
+    'Э': '..-..', 'Ю': '..--', 'Я': '.-.-',
+    '1': '.----', '2': '..---', '3': '...--', '4': '....-',
+    '5': '.....', '6': '-....', '7': '--...', '8': '---..',
+    '9': '----.', '0': '-----',
+    ' ': '/', ',': '--..--', '.': '.-.-.-', '?': '..--..', '!': '-.-.--'
+};
 
-// Блокировка навигационных клавиш
-function blockNavigation(e) {
-    if (e.key === 'ArrowLeft' || e.key === 'ArrowRight' || 
-        e.key === 'PageUp' || e.key === 'PageDown' ||
-        e.key === ' ' || e.key === 'Spacebar') {
-        e.stopPropagation();
-        e.preventDefault();
-    }
-}
-
-// Обновление значения сдвига
-function updateShiftValue(value) {
-    const shiftValue = document.getElementById('shift-value');
-    if (shiftValue) {
-        shiftValue.textContent = value;
-    }
-}
-
-// ============================================
-// ОБНОВЛЕННЫЕ ФУНКЦИИ ШИФРА ЦЕЗАРЯ
-// ============================================
-
-function encryptCaesar() {
-    try {
-        const text = document.getElementById('caesar-text').value;
-        const shift = parseInt(document.getElementById('caesar-shift').value);
-        const result = document.getElementById('caesar-result');
-        
-        if (!text.trim()) {
-            alert('Введите текст для шифрования');
-            return false;
-        }
-        
-        const encrypted = caesarCipher(text, shift, true);
-        result.textContent = encrypted;
-        result.style.color = '#2ecc71';
-        
-        console.log('Зашифровано:', text, '→', encrypted);
-        return false; // Предотвращаем всплытие события
-    } catch (error) {
-        console.error('Ошибка при шифровании:', error);
-        return false;
-    }
-}
-
-function decryptCaesar() {
-    try {
-        const text = document.getElementById('caesar-text').value;
-        const shift = parseInt(document.getElementById('caesar-shift').value);
-        const result = document.getElementById('caesar-result');
-        
-        if (!text.trim()) {
-            alert('Введите текст для дешифрования');
-            return false;
-        }
-        
-        const decrypted = caesarCipher(text, shift, false);
-        result.textContent = decrypted;
-        result.style.color = '#f39c12';
-        
-        console.log('Расшифровано:', text, '→', decrypted);
-        return false; // Предотвращаем всплытие события
-    } catch (error) {
-        console.error('Ошибка при дешифровании:', error);
-        return false;
-    }
-}
-
-// ============================================
-// ОБНОВЛЕННАЯ ИНИЦИАЛИЗАЦИЯ СЛАЙДА
-// ============================================
-
-function initCaesarDemo() {
-    console.log('Инициализация демо шифра Цезаря...');
-    
-    const caesarText = document.getElementById('caesar-text');
-    const caesarShift = document.getElementById('caesar-shift');
-    const shiftValue = document.getElementById('shift-value');
-    
-    if (caesarText && caesarShift && shiftValue) {
-        // Устанавливаем начальное значение
-        updateShiftValue(caesarShift.value);
-        
-        // Обновление значения сдвига при движении ползунка
-        caesarShift.addEventListener('input', function(e) {
-            e.stopPropagation();
-            updateShiftValue(this.value);
-        });
-        
-        // Обработка кликов на кнопках
-        const encryptBtn = document.querySelector('#slide-7 .btn-encrypt');
-        const decryptBtn = document.querySelector('#slide-7 .btn-decrypt');
-        
-        if (encryptBtn) {
-            encryptBtn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                e.preventDefault();
-                encryptCaesar();
-            });
-        }
-        
-        if (decryptBtn) {
-            decryptBtn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                e.preventDefault();
-                decryptCaesar();
-            });
-        }
-        
-        // Автоматическое шифрование при загрузке
-        setTimeout(() => {
-            if (caesarText.value) {
-                encryptCaesar();
-            }
-        }, 500);
-        
-        console.log('Демо шифра Цезаря инициализировано');
-    } else {
-        console.error('Не найдены элементы демо шифра Цезаря');
-    }
-}
-
-// ============================================
-// ОБНОВЛЕННАЯ ФУНКЦИЯ ПОКАЗА СЛАЙДА
-// ============================================
-
-function showSlide(index) {
-    if (index < 0) index = 0;
-    if (index >= totalSlides) index = totalSlides - 1;
-    
-    // Скрываем все слайды
-    slides.forEach(slide => {
-        slide.classList.remove('active');
-        slide.style.display = 'none';
-    });
-    
-    // Показываем выбранный слайд
-    slides[index].classList.add('active');
-    slides[index].style.display = 'block';
-    
-    currentSlideIndex = index;
-    
-    // Обновляем отображение номера слайда
-    if (currentSlideDisplay) {
-        currentSlideDisplay.textContent = `${currentSlideIndex + 1} / ${totalSlides}`;
-    }
-    
-    updateButtons();
-    
-    // Инициализируем интерактивные элементы на текущем слайде
-    setTimeout(() => {
-        switch(index) {
-            case 6: // Слайд 7 (индекс 6)
-                initCaesarDemo();
-                break;
-            case 9: // Слайд 10 (индекс 9)
-                initMHDemo();
-                break;
-            case 12: // Слайд 13 (индекс 12)
-                initMorseDemo();
-                break;
-        }
-    }, 100);
-}
-
-// ============================================
-// ОБНОВЛЕННАЯ ИНИЦИАЛИЗАЦИЯ ПРИ ЗАГРУЗКЕ
-// ============================================
-
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('Презентация "Криптографические алгоритмы" загружается...');
-    
-    // Инициализация навигации
-    if (prevBtn && nextBtn) {
-        prevBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            disableDemoMode();
-            prevSlide();
-        });
-        
-        nextBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            disableDemoMode();
-            nextSlide();
-        });
-    }
-    
-    // Показываем первый слайд
-    showSlide(0);
-    
-    // Инициализация клавиатурной навигации
-    initKeyboardNavigation();
-    
-    // Генерация начальных ключей для Меркла-Хеллмана
-    setTimeout(generateMHKeys, 500);
-    
-    console.log(`Презентация загружена. Всего слайдов: ${totalSlides}`);
-});
-
-// ============================================
-// НАВИГАЦИЯ И ОСНОВНОЙ СКРИПТ ПРЕЗЕНТАЦИИ
-// ============================================
-
+// Глобальные переменные навигации
 let currentSlideIndex = 0;
-const slides = document.querySelectorAll('.slide');
-const totalSlides = slides.length;
-const currentSlideDisplay = document.getElementById('current-slide');
-const prevBtn = document.getElementById('prev-btn');
-const nextBtn = document.getElementById('next-btn');
+let slides = [];
+let totalSlides = 0;
+let currentSlideDisplay = null;
+let prevBtn = null;
+let nextBtn = null;
 
-// Инициализация навигации
+// ============================================
+// ОСНОВНЫЕ ФУНКЦИИ НАВИГАЦИИ
+// ============================================
+
 function initNavigation() {
+    slides = document.querySelectorAll('.slide');
+    totalSlides = slides.length;
+    currentSlideDisplay = document.getElementById('current-slide');
+    prevBtn = document.getElementById('prev-btn');
+    nextBtn = document.getElementById('next-btn');
+    
     if (prevBtn) {
         prevBtn.addEventListener('click', function(e) {
             e.stopPropagation();
@@ -247,11 +61,13 @@ function showSlide(index) {
     if (index < 0) index = 0;
     if (index >= totalSlides) index = totalSlides - 1;
     
+    // Скрываем все слайды
     slides.forEach(slide => {
         slide.classList.remove('active');
         slide.style.display = 'none';
     });
     
+    // Показываем выбранный слайд
     slides[index].classList.add('active');
     slides[index].style.display = 'block';
     
@@ -300,13 +116,13 @@ function prevSlide() {
 
 function initSlideInteractiveElements(slideIndex) {
     switch(slideIndex + 1) {
-        case 7: // Демонстрация шифра Цезаря
+        case 7: // Слайд 7: Демонстрация шифра Цезаря
             initCaesarDemo();
             break;
-        case 11: // Демонстрация Меркла-Хеллмана
+        case 10: // Слайд 10: Демонстрация Меркла-Хеллмана
             initMHDemo();
             break;
-        case 14: // Демонстрация азбуки Морзе
+        case 13: // Слайд 13: Демонстрация азбуки Морзе
             initMorseDemo();
             break;
     }
@@ -316,17 +132,20 @@ function initCaesarDemo() {
     const caesarText = document.getElementById('caesar-text');
     const caesarShift = document.getElementById('caesar-shift');
     const shiftValue = document.getElementById('shift-value');
-    const encryptBtn = document.getElementById('encrypt-btn');
-    const decryptBtn = document.getElementById('decrypt-btn');
+    const encryptBtn = document.querySelector('#slide-7 .btn-encrypt');
+    const decryptBtn = document.querySelector('#slide-7 .btn-decrypt');
     
     if (caesarText && caesarShift && shiftValue) {
-        // Обновление значения сдвига
+        // Устанавливаем начальное значение
+        shiftValue.textContent = caesarShift.value;
+        
+        // Обновление значения сдвига при движении ползунка
         caesarShift.addEventListener('input', function(e) {
             e.stopPropagation();
-            if (shiftValue) shiftValue.textContent = this.value;
+            shiftValue.textContent = this.value;
         });
         
-        // Инициализация кнопок
+        // Обработка кликов на кнопках
         if (encryptBtn) {
             encryptBtn.addEventListener('click', function(e) {
                 e.stopPropagation();
@@ -343,23 +162,18 @@ function initCaesarDemo() {
             });
         }
         
-        // Разрешаем ввод в текстовых полях
-        if (caesarText) {
-            caesarText.addEventListener('mousedown', function(e) {
-                e.stopPropagation();
-            });
-            
-            caesarText.addEventListener('keydown', function(e) {
-                e.stopPropagation();
-            });
-        }
+        // Автоматическое шифрование при загрузке
+        setTimeout(() => {
+            if (caesarText.value) {
+                encryptCaesar();
+            }
+        }, 300);
         
-        console.log('Инициализирована демонстрация шифра Цезаря');
+        console.log('Демо шифра Цезаря инициализировано');
     }
 }
 
 function initMHDemo() {
-    const mhMessage = document.getElementById('mh-message');
     const mhGenerateBtn = document.getElementById('mh-generate-btn');
     const mhEncryptBtn = document.getElementById('mh-encrypt-btn');
     const mhDecryptBtn = document.getElementById('mh-decrypt-btn');
@@ -388,13 +202,12 @@ function initMHDemo() {
         });
     }
     
-    console.log('Инициализирована демонстрация Меркла-Хеллмана');
+    console.log('Демо Меркла-Хеллмана инициализировано');
 }
 
 function initMorseDemo() {
-    const morseText = document.getElementById('morse-text');
-    const morseToTextBtn = document.getElementById('morse-to-text-btn');
     const textToMorseBtn = document.getElementById('text-to-morse-btn');
+    const morseToTextBtn = document.getElementById('morse-to-text-btn');
     
     if (textToMorseBtn) {
         textToMorseBtn.addEventListener('click', function(e) {
@@ -412,14 +225,12 @@ function initMorseDemo() {
         });
     }
     
-    console.log('Инициализирована демонстрация азбуки Морзе');
+    console.log('Демо азбуки Морзе инициализировано');
 }
 
 // ============================================
-// ШИФР ЦЕЗАРЯ (сохраняем вашу реализацию)
+// ШИФР ЦЕЗАРЯ
 // ============================================
-
-const CAESAR_ALPHABET = 'АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ 1234567890,?.';
 
 function caesarCipher(text, shift, encrypt = true) {
     let result = '';
@@ -446,39 +257,55 @@ function caesarCipher(text, shift, encrypt = true) {
 }
 
 function encryptCaesar() {
-    const text = document.getElementById('caesar-text');
-    const shift = document.getElementById('caesar-shift');
-    const result = document.getElementById('caesar-result');
-    
-    if (!text || !shift || !result) {
-        console.error('Элементы шифра Цезаря не найдены');
-        return;
+    try {
+        const text = document.getElementById('caesar-text').value;
+        const shift = parseInt(document.getElementById('caesar-shift').value);
+        const result = document.getElementById('caesar-result');
+        
+        if (!text.trim()) {
+            alert('Введите текст для шифрования');
+            return false;
+        }
+        
+        const encrypted = caesarCipher(text, shift, true);
+        result.textContent = encrypted;
+        result.style.background = '#e8f6f3';
+        result.style.borderColor = '#2ecc71';
+        
+        console.log('Зашифровано:', text, '→', encrypted);
+        return false;
+    } catch (error) {
+        console.error('Ошибка при шифровании:', error);
+        return false;
     }
-    
-    const encrypted = caesarCipher(text.value, parseInt(shift.value), true);
-    result.textContent = encrypted;
-    
-    console.log('Зашифровано:', text.value, '→', encrypted);
 }
 
 function decryptCaesar() {
-    const text = document.getElementById('caesar-text');
-    const shift = document.getElementById('caesar-shift');
-    const result = document.getElementById('caesar-result');
-    
-    if (!text || !shift || !result) {
-        console.error('Элементы шифра Цезаря не найдены');
-        return;
+    try {
+        const text = document.getElementById('caesar-text').value;
+        const shift = parseInt(document.getElementById('caesar-shift').value);
+        const result = document.getElementById('caesar-result');
+        
+        if (!text.trim()) {
+            alert('Введите текст для дешифрования');
+            return false;
+        }
+        
+        const decrypted = caesarCipher(text, shift, false);
+        result.textContent = decrypted;
+        result.style.background = '#fef9e7';
+        result.style.borderColor = '#f39c12';
+        
+        console.log('Расшифровано:', text, '→', decrypted);
+        return false;
+    } catch (error) {
+        console.error('Ошибка при дешифровании:', error);
+        return false;
     }
-    
-    const decrypted = caesarCipher(text.value, parseInt(shift.value), false);
-    result.textContent = decrypted;
-    
-    console.log('Расшифровано:', text.value, '→', decrypted);
 }
 
 // ============================================
-// КРИПТОСИСТЕМА МЕРКЛА-ХЕЛЛМАНА (сохраняем вашу реализацию)
+// КРИПТОСИСТЕМА МЕРКЛА-ХЕЛЛМАНА
 // ============================================
 
 class MerkleHellman {
@@ -638,22 +465,8 @@ function decryptMH() {
 }
 
 // ============================================
-// АЗБУКА МОРЗЕ (сохраняем вашу реализацию)
+// АЗБУКА МОРЗЕ
 // ============================================
-
-const MORSE_CODE = {
-    'А': '.-', 'Б': '-...', 'В': '.--', 'Г': '--.', 'Д': '-..',
-    'Е': '.', 'Ё': '.', 'Ж': '...-', 'З': '--..', 'И': '..',
-    'Й': '.---', 'К': '-.-', 'Л': '.-..', 'М': '--', 'Н': '-.',
-    'О': '---', 'П': '.--.', 'Р': '.-.', 'С': '...', 'Т': '-',
-    'У': '..-', 'Ф': '..-.', 'Х': '....', 'Ц': '-.-.', 'Ч': '---.',
-    'Ш': '----', 'Щ': '--.-', 'Ъ': '--.--', 'Ы': '-.--', 'Ь': '-..-',
-    'Э': '..-..', 'Ю': '..--', 'Я': '.-.-',
-    '1': '.----', '2': '..---', '3': '...--', '4': '....-',
-    '5': '.....', '6': '-....', '7': '--...', '8': '---..',
-    '9': '----.', '0': '-----',
-    ' ': '/', ',': '--..--', '.': '.-.-.-', '?': '..--..', '!': '-.-.--'
-};
 
 function textToMorse(text) {
     return text.toUpperCase().split('').map(char => 
@@ -684,6 +497,8 @@ function textToMorseDemo() {
     const text = textInput.value;
     const result = textToMorse(text);
     resultDiv.textContent = result;
+    resultDiv.style.background = '#e8f6f3';
+    resultDiv.style.borderColor = '#2ecc71';
     
     console.log('Текст → Морзе:', text, '→', result);
 }
@@ -700,6 +515,8 @@ function morseToTextDemo() {
     const morse = textInput.value;
     const result = morseToText(morse);
     resultDiv.textContent = result;
+    resultDiv.style.background = '#fef9e7';
+    resultDiv.style.borderColor = '#f39c12';
     
     console.log('Морзе → Текст:', morse, '→', result);
 }
@@ -721,16 +538,12 @@ function initKeyboardNavigation() {
         
         // Если элемент интерактивный, не перехватываем навигационные клавиши
         if (isInteractive) {
-            // Разрешаем только стрелки вверх/вниз для навигации в текстовых полях
+            // Разрешаем только стрелки для навигации в текстовых полях
             if (activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA') {
                 if (event.key === 'ArrowLeft' || event.key === 'ArrowRight' || 
                     event.key === 'ArrowUp' || event.key === 'ArrowDown') {
                     return true;
                 }
-            }
-            // Для кнопок и select разрешаем только Enter/Space
-            if (event.key !== 'Enter' && event.key !== ' ' && event.key !== 'Spacebar') {
-                event.stopPropagation();
             }
             return;
         }
@@ -765,7 +578,7 @@ function initKeyboardNavigation() {
                 nextSlide();
                 break;
         }
-    }, true); // Используем capture phase для перехвата событий
+    }, true);
 }
 
 // ============================================
@@ -786,11 +599,13 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Автоматическое шифрование примера при загрузке
     setTimeout(() => {
-        if (document.getElementById('caesar-text')) {
+        // Если мы на слайде с шифром Цезаря
+        if (document.querySelector('#slide-7.active')) {
             encryptCaesar();
         }
         
-        if (document.getElementById('morse-text')) {
+        // Если мы на слайде с азбукой Морзе
+        if (document.querySelector('#slide-13.active')) {
             textToMorseDemo();
         }
     }, 500);
@@ -799,7 +614,10 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('Готово к использованию!');
 });
 
-// Экспорт функций для глобального доступа
+// ============================================
+// ЭКСПОРТ ФУНКЦИЙ ДЛЯ ГЛОБАЛЬНОГО ДОСТУПА
+// ============================================
+
 window.encryptCaesar = encryptCaesar;
 window.decryptCaesar = decryptCaesar;
 window.generateMHKeys = generateMHKeys;
@@ -809,3 +627,4 @@ window.textToMorseDemo = textToMorseDemo;
 window.morseToTextDemo = morseToTextDemo;
 window.nextSlide = nextSlide;
 window.prevSlide = prevSlide;
+window.showSlide = showSlide;
