@@ -34,21 +34,27 @@ let nextBtn = null;
 
 function initNavigation() {
     slides = document.querySelectorAll('.slide');
-    totalSlides = 15;
-    currentSlideDisplay = document.getElementById('current-slide');
-    prevBtn = document.getElementById('prev-btn');
-    nextBtn = document.getElementById('next-btn');
+    const currentSlideDisplay = document.getElementById('current-slide');
+    const totalSlidesDisplay = document.getElementById('total-slides');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
     
+    // Устанавливаем общее количество слайдов
+    if (totalSlidesDisplay) {
+        totalSlidesDisplay.textContent = totalSlides;
+    }
+    
+    // Назначаем обработчики для кнопок
     if (prevBtn) {
         prevBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
+            e.preventDefault();
             prevSlide();
         });
     }
     
     if (nextBtn) {
         nextBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
+            e.preventDefault();
             nextSlide();
         });
     }
