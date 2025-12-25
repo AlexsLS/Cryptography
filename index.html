@@ -859,31 +859,30 @@ function caesarCipher(text, shift, encrypt = true) {
 
         <!-- Навигация -->
        <div class="navigation">
-            <button id="prev-btn" class="nav-btn" onclick="prevSlide()">
+            <button id="prev-btn" class="nav-btn">
                 <i class="fas fa-arrow-left"></i> Назад
             </button>
             <div class="slide-counter">
-                Слайд: <span id="current-slide">1</span>/15
+                Слайд: <span id="current-slide">1</span>/<span id="total-slides">15</span>
             </div>
-            <button id="next-btn" class="nav-btn" onclick="nextSlide()">
+            <button id="next-btn" class="nav-btn">
                 Вперед <i class="fas fa-arrow-right"></i>
             </button>
         </div>
-    </div> <!-- Закрытие .content -->
+    </div>
 
     <!-- Scripts -->
     <script src="script.js"></script>
     <script>
-        // Установка текущей даты
+         // Установка текущей даты
         const currentDate = new Date();
         const formattedDate = currentDate.toLocaleDateString('ru-RU', {
             day: 'numeric',
             month: 'long',
             year: 'numeric'
         });
-        
         document.getElementById('current-date').textContent = formattedDate;
-        document.getElementById('presentation-date').textContent = formattedDate;
+        document.getElementById('presentation-date').textContent = formattedDate
         
         // Функции навигации по слайдам
         let currentSlide = 1;
