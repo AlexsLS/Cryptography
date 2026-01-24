@@ -27,7 +27,7 @@ let nextBtn = null;
 
 function initNavigation() {
     slides = document.querySelectorAll('.slide');
-    totalSlides = 15;
+    totalSlides = 16;
     currentSlideDisplay = document.getElementById('current-slide');
     prevBtn = document.getElementById('prev-btn');
     nextBtn = document.getElementById('next-btn');
