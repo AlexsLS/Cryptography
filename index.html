@@ -4,13 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Криптографические алгоритмы</title>
-    
     <!-- Custom CSS -->
     <link rel="stylesheet" href="style.css">
-    
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <style>
         /* Основные стили */
         body {
@@ -22,34 +19,28 @@
             overflow: hidden;
             color: #333;
         }
-        
         h1, h2, h3, h4 {
             color: #2c3e50;
             margin-top: 0;
         }
-        
         h1 {
             font-size: 3.5em;
             margin-bottom: 20px;
             text-align: center;
         }
-        
         h2 {
             font-size: 2.5em;
             margin-bottom: 30px;
             text-align: center;
         }
-        
         h3 {
             font-size: 1.8em;
             margin-bottom: 15px;
         }
-        
         h4 {
             font-size: 1.4em;
             margin-bottom: 10px;
         }
-        
         /* Слайды */
         .content {
             max-width: 1200px;
@@ -59,7 +50,6 @@
             padding: 20px;
             box-sizing: border-box;
         }
-        
         .slide {
             display: none;
             position: absolute;
@@ -72,11 +62,9 @@
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
-        
         .slide.active {
             display: block;
         }
-        
         /* Навигация */
         .navigation {
             position: fixed;
@@ -92,7 +80,6 @@
             color: white;
             backdrop-filter: blur(5px);
         }
-        
         .nav-btn {
             background: #3498db;
             color: white;
@@ -107,25 +94,21 @@
             align-items: center;
             gap: 8px;
         }
-        
         .nav-btn:hover:not(:disabled) {
             background: #2980b9;
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
-        
         .nav-btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
         }
-        
         .slide-counter {
             font-size: 18px;
             font-weight: bold;
             min-width: 120px;
             text-align: center;
         }
-        
         /* Контейнеры и карточки */
         .card {
             background: white;
@@ -135,19 +118,16 @@
             margin-bottom: 20px;
             transition: transform 0.3s ease;
         }
-        
         .card:hover {
             transform: translateY(-5px);
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
         }
-        
         .grid-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 25px;
             margin: 30px 0;
         }
-        
         /* Демонстрационные блоки */
         .demo-container {
             background: white;
@@ -157,11 +137,9 @@
             margin-top: 25px;
             border: 1px solid #eaeaea;
         }
-        
         .input-group {
             margin-bottom: 25px;
         }
-        
         .input-group label {
             display: block;
             margin-bottom: 10px;
@@ -169,7 +147,6 @@
             color: #2c3e50;
             font-size: 1.1em;
         }
-        
         .input-group textarea,
         .input-group input[type="text"],
         .input-group input[type="range"] {
@@ -182,19 +159,16 @@
             box-sizing: border-box;
             font-family: inherit;
         }
-        
         .input-group textarea {
             min-height: 100px;
             resize: vertical;
         }
-        
         .input-group textarea:focus,
         .input-group input[type="text"]:focus {
             outline: none;
             border-color: #3498db;
             box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
         }
-        
         /* Кнопки */
         .button-group {
             display: flex;
