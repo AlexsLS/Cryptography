@@ -570,7 +570,51 @@
                 <p><strong>Алфавит в нашей реализации:</strong> 47 символов (33 русские буквы + 10 цифр + пробел, запятая, точка, знак вопроса, восклицательный знак)</p>
             </div>
         </div>
-
+        <div class="slide" id="slide-6a">
+    <h2>Пример шифра Цезаря</h2>
+    
+    <div class="card">
+        <h3>Шаг за шагом (сдвиг = 3):</h3>
+        
+        <div class="grid-container">
+            <div class="card">
+                <h4>Исходный текст:</h4>
+                <div class="result-box" style="text-align: center; font-size: 1.5em;">
+                    П Р И В Е Т
+                </div>
+                <p>Индексы: 16 17 9 3 6 19</p>
+            </div>
+            
+            <div class="card">
+                <h4>Формула: (x + 3) mod 47</h4>
+                <div class="result-box" style="text-align: center; font-size: 1.5em;">
+                    19 20 12 6 9 22
+                </div>
+                <p>Новые индексы</p>
+            </div>
+            
+            <div class="card">
+                <h4>Зашифрованный текст:</h4>
+                <div class="result-box" style="text-align: center; font-size: 1.5em; color: #e74c3c;">
+                    Т У Л З И Х
+                </div>
+                <p>ТУЛЗИХ</p>
+            </div>
+        </div>
+        
+        <table style="width: 100%; margin-top: 20px; border-collapse: collapse;">
+            <tr>
+                <th>Буква</th><th>Индекс</th><th>→</th><th>Новый индекс</th><th>→</th><th>Шифр</th>
+            </tr>
+            <tr><td>П</td><td>16</td><td>→</td><td>19</td><td>→</td><td>Т</td></tr>
+            <tr><td>Р</td><td>17</td><td>→</td><td>20</td><td>→</td><td>У</td></tr>
+            <tr><td>И</td><td>9</td><td>→</td><td>12</td><td>→</td><td>Л</td></tr>
+            <tr><td>В</td><td>3</td><td>→</td><td>6</td><td>→</td><td>З</td></tr>
+            <tr><td>Е</td><td>6</td><td>→</td><td>9</td><td>→</td><td>И</td></tr>
+            <tr><td>Т</td><td>19</td><td>→</td><td>22</td><td>→</td><td>Х</td></tr>
+        </table>
+    </div>
+</div>
         <!-- Слайд 7: Демонстрация шифра Цезаря -->
         <div class="slide" id="slide-7">
             <h2>Демонстрация: Шифр Цезаря</h2>
