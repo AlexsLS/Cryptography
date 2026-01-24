@@ -570,49 +570,112 @@
                 <p><strong>Алфавит в нашей реализации:</strong> 47 символов (33 русские буквы + 10 цифр + пробел, запятая, точка, знак вопроса, восклицательный знак)</p>
             </div>
         </div>
-        <div class="slide" id="slide-6a">
-    <h2>Пример шифра Цезаря</h2>
+      <!-- Слайд 6a: Пример шифра Цезаря -->
+<div class="slide" id="slide-6a">
+    <h2>Подробный пример шифра Цезаря</h2>
     
     <div class="card">
-        <h3>Шаг за шагом (сдвиг = 3):</h3>
+        <h3><i class="fas fa-calculator"></i> Пошаговое шифрование</h3>
+        <p>Исходный текст: <strong>"ПРИВЕТ"</strong>, Сдвиг: <strong>3</strong></p>
         
-        <div class="grid-container">
+        <div class="grid-container mt-20">
             <div class="card">
-                <h4>Исходный текст:</h4>
-                <div class="result-box" style="text-align: center; font-size: 1.5em;">
-                    П Р И В Е Т
+                <h4>Шаг 1: Находим индексы букв</h4>
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; font-family: 'Courier New'; text-align: center;">
+                    <div style="display: flex; justify-content: space-around; margin-bottom: 10px;">
+                        <span>П → 16</span>
+                        <span>Р → 17</span>
+                        <span>И → 9</span>
+                        <span>В → 3</span>
+                        <span>Е → 6</span>
+                        <span>Т → 19</span>
+                    </div>
                 </div>
-                <p>Индексы: 16 17 9 3 6 19</p>
+                <p class="mt-10">Алфавит: А(0) Б(1) В(2) Г(3) Д(4) ... Я(32) ПРОБЕЛ(33) 1(34) ... ?(46)</p>
             </div>
             
             <div class="card">
-                <h4>Формула: (x + 3) mod 47</h4>
-                <div class="result-box" style="text-align: center; font-size: 1.5em;">
-                    19 20 12 6 9 22
+                <h4>Шаг 2: Применяем формулу</h4>
+                <p>E(x) = (x + 3) mod 47</p>
+                <div style="background: #e8f6f3; padding: 15px; border-radius: 8px; font-family: 'Courier New'; text-align: center;">
+                    <div style="display: flex; justify-content: space-around; margin-bottom: 10px;">
+                        <span>(16+3)=19</span>
+                        <span>(17+3)=20</span>
+                        <span>(9+3)=12</span>
+                        <span>(3+3)=6</span>
+                        <span>(6+3)=9</span>
+                        <span>(19+3)=22</span>
+                    </div>
                 </div>
-                <p>Новые индексы</p>
             </div>
             
             <div class="card">
-                <h4>Зашифрованный текст:</h4>
-                <div class="result-box" style="text-align: center; font-size: 1.5em; color: #e74c3c;">
-                    Т У Л З И Х
+                <h4>Шаг 3: Преобразуем обратно</h4>
+                <div style="background: #fef9e7; padding: 15px; border-radius: 8px; font-family: 'Courier New'; text-align: center;">
+                    <div style="display: flex; justify-content: space-around; margin-bottom: 10px;">
+                        <span>19 → Т</span>
+                        <span>20 → У</span>
+                        <span>12 → Л</span>
+                        <span>6 → З</span>
+                        <span>9 → И</span>
+                        <span>22 → Х</span>
+                    </div>
                 </div>
-                <p>ТУЛЗИХ</p>
+                <p class="mt-10"><strong>Результат: ТУЛЗИХ</strong></p>
             </div>
         </div>
         
-        <table style="width: 100%; margin-top: 20px; border-collapse: collapse;">
-            <tr>
-                <th>Буква</th><th>Индекс</th><th>→</th><th>Новый индекс</th><th>→</th><th>Шифр</th>
-            </tr>
-            <tr><td>П</td><td>16</td><td>→</td><td>19</td><td>→</td><td>Т</td></tr>
-            <tr><td>Р</td><td>17</td><td>→</td><td>20</td><td>→</td><td>У</td></tr>
-            <tr><td>И</td><td>9</td><td>→</td><td>12</td><td>→</td><td>Л</td></tr>
-            <tr><td>В</td><td>3</td><td>→</td><td>6</td><td>→</td><td>З</td></tr>
-            <tr><td>Е</td><td>6</td><td>→</td><td>9</td><td>→</td><td>И</td></tr>
-            <tr><td>Т</td><td>19</td><td>→</td><td>22</td><td>→</td><td>Х</td></tr>
-        </table>
+        <div class="note mt-20">
+            <h4><i class="fas fa-lightbulb"></i> Визуализация сдвига:</h4>
+            <div style="display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap;">
+                <div style="text-align: center;">
+                    <div style="background: #3498db; color: white; padding: 5px 10px; border-radius: 5px; margin: 5px;">
+                        П
+                    </div>
+                    <div>↓ +3</div>
+                    <div style="background: #2ecc71; color: white; padding: 5px 10px; border-radius: 5px; margin: 5px;">
+                        Т
+                    </div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="background: #3498db; color: white; padding: 5px 10px; border-radius: 5px; margin: 5px;">
+                        Р
+                    </div>
+                    <div>↓ +3</div>
+                    <div style="background: #2ecc71; color: white; padding: 5px 10px; border-radius: 5px; margin: 5px;">
+                        У
+                    </div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="background: #3498db; color: white; padding: 5px 10px; border-radius: 5px; margin: 5px;">
+                        И
+                    </div>
+                    <div>↓ +3</div>
+                    <div style="background: #2ecc71; color: white; padding: 5px 10px; border-radius: 5px; margin: 5px;">
+                        Л
+                    </div>
+                </div>
+                <span style="font-size: 1.5em;">...</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="info-box mt-30">
+        <h4><i class="fas fa-history"></i> Еще примеры:</h4>
+        <div class="grid-container">
+            <div class="card" style="background: rgba(255,255,255,0.2);">
+                <h5>Сдвиг 5:</h5>
+                <p>"МОСКВА" → "РХОПЕЕ"</p>
+            </div>
+            <div class="card" style="background: rgba(255,255,255,0.2);">
+                <h5>Сдвиг 10:</h5>
+                <p>"ЦИФРА" → "ЬСЧБК"</p>
+            </div>
+            <div class="card" style="background: rgba(255,255,255,0.2);">
+                <h5>Обратный сдвиг:</h5>
+                <p>"ТУЛЗИХ" (-3) → "ПРИВЕТ"</p>
+            </div>
+        </div>
     </div>
 </div>
         <!-- Слайд 7: Демонстрация шифра Цезаря -->
